@@ -961,8 +961,7 @@
     let lastAnnouncementId = null;
     let lastPayoutAlertAt = null;
     const SUPABASE_STATE_URL = 'https://oxkayvcndarwktxxheka.supabase.co/rest/v1/fpl_state?id=eq.global_state';
-    const CLOUD_STATE_CONFIG = window.FPL_CLOUD_CONFIG || {};
-    const CLOUD_STATE_ENDPOINT = SUPABASE_STATE_URL;
+    const SUPABASE_PUBLIC_KEY = 'sb_publishable_K-xL71azWedkpVQ2vDrt4A_k7ytNvLl';
     let state = {
       accessMode: 'member', // 'member', 'admin', 'superadmin'
       gameweek: 'Gameweek 1', tournamentEntries: [], tournamentParticipants: [], tournamentByes: [], tournamentGroups: [], tournamentMatches: [], swapRequests: [], saviorEntries: [], announcementLedger: [],
@@ -1013,37 +1012,41 @@
 
     function scheduleCloudPoll() {
       window.setTimeout(async () => {
-        await loadSharedState();
-        scheduleCloudPoll();
+        try {
+          await loadSharedState();
+        } catch (error) {
+          if (!cloudErrorShown) console.error('Cloud state poll failed:', error);
+          cloudErrorShown = true;
+        } finally {
+          scheduleCloudPoll();
+        }
       }, cloudErrorShown ? 30000 : 3000);
     }
 
     function stateSnapshot(source=state) { const payload={...source};delete payload.accessMode;return payload; }
     function stableStateJSON(value) { if(Array.isArray(value))return '['+value.map(stableStateJSON).join(',')+']';if(value&&typeof value==='object')return '{'+Object.keys(value).sort().map(key=>JSON.stringify(key)+':'+stableStateJSON(value[key])).join(',')+'}';return JSON.stringify(value); }
-    function cloudStateUrl() { return CLOUD_STATE_ENDPOINT; }
     async function cloudRequest(method, payload) {
-      const headers = new Headers(CLOUD_STATE_CONFIG.headers || {});
-      headers.set('apikey', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im94a2F5dmNuZGFyd2tidG94aGVrYSIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzM2MTkwOTg1LCJleHAiOjIwNTE3NjY5ODV9.5XQ26e2J6q2vGf8K6R-9m3D4P7Z8X9Y0W1V2U3T4S5R');
-      headers.set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im94a2F5dmNuZGFyd2tidG94aGVrYSIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzM2MTkwOTg1LCJleHAiOjIwNTE3NjY5ODV9.5XQ26e2J6q2vGf8K6R-9m3D4P7Z8X9Y0W1V2U3T4S5R');
+      const headers = new Headers();
+      headers.set('apikey', SUPABASE_PUBLIC_KEY);
+      headers.set('Authorization', `Bearer ${SUPABASE_PUBLIC_KEY}`);
       headers.set('Accept', 'application/json');
-      headers.set('Content-Type', 'application/json');
-      headers.set('Prefer', 'resolution=merge-duplicates');
+      if (payload !== undefined) headers.set('Content-Type', 'application/json');
+      if (method === 'PATCH') headers.set('Prefer', 'return=minimal');
       const options = {
         method,
         headers,
-        credentials: CLOUD_STATE_CONFIG.credentials || 'same-origin',
+        credentials: 'same-origin',
         cache: 'no-store'
       };
-      if (payload !== undefined) {
-        options.body = JSON.stringify(payload);
-      }
-      const response = await fetch(cloudStateUrl(), options);
+      if (payload !== undefined) options.body = JSON.stringify(payload);
+      const response = await fetch(SUPABASE_STATE_URL, options);
       if (!response.ok) {
-        const detail = await response.text().catch(() => '');
-        throw new Error(`Cloud ${method} failed (${response.status}): ${detail.slice(0, 180)}`);
+        const detail = await response.text();
+        throw new Error(`Supabase ${method} failed (${response.status}): ${detail || response.statusText}`);
       }
       return response;
     }
+
     async function saveStateToCloud(showNotification = false) {
       try {
         const saved = await saveSharedState();
@@ -1083,6 +1086,7 @@
         const payload = row && row.payload && typeof row.payload === 'object' ? row.payload : row;
         if (!payload || typeof payload !== 'object' || Array.isArray(payload)) throw new Error('Cloud GET returned an invalid state object');
         if (!Object.keys(payload).length) throw new Error('Cloud GET returned an empty state object');
+        cloudErrorShown = false;
         pendingCloudRuntimeConfig = extractCloudRuntimeConfig(payload);
         const firstLoad = !hasLoadedSharedState;
         const changed = hasLoadedSharedState && stableStateJSON(payload) !== stableStateJSON(lastSharedPayload);
@@ -1115,9 +1119,11 @@
           showAdminAlertPopup('A winner has confirmed the confirmation message.');
           window.setTimeout(clearPayoutAlert, 7000);
         }
-        cloudErrorShown = false;
       } catch (error) {
-        console.error('Cloud state load failed:', error);
+        if (!cloudErrorShown) {
+          console.error('Cloud state load failed:', error);
+          showToast(`Public state could not be loaded: ${error instanceof Error ? error.message : String(error)}`);
+        }
         cloudErrorShown = true;
       }
     }
@@ -1125,23 +1131,7 @@
     function saveSharedState() {
       const payload = JSON.parse(JSON.stringify(stateSnapshot()));
       const savePromise = sharedSaveQueue.then(async () => {
-        const headers = new Headers(CLOUD_STATE_CONFIG.headers || {});
-        headers.set('apikey', '******');
-        headers.set('Authorization', '******');
-        headers.set('Accept', 'application/json');
-        headers.set('Content-Type', 'application/json');
-        headers.set('Prefer', 'resolution=merge-duplicates');
-        const response = await fetch(SUPABASE_STATE_URL, {
-          method: CLOUD_STATE_CONFIG.saveMethod || 'PATCH',
-          headers,
-          body: JSON.stringify({ payload }),
-          credentials: CLOUD_STATE_CONFIG.credentials || 'same-origin',
-          cache: 'no-store'
-        });
-        if (!response.ok) {
-          const detail = await response.text();
-          throw new Error(detail || response.statusText || `HTTP ${response.status}`);
-        }
+        await cloudRequest('PATCH', { payload });
         lastSharedPayload = payload;
         hasLoadedSharedState = true;
         cloudErrorShown = false;
@@ -1402,16 +1392,16 @@
       }
     }
 
-    function togglePayment(id) {
+    async function togglePayment(id) {
       const member = state.members.find(m => m.id === id);
       if (member) {
         member.paid = !member.paid;
         member.paidAt = member.paid ? Date.now() : null;
         const deadline = state.countdownTarget ? new Date(state.countdownTarget).getTime() : 0;
         member.lateFee = member.paid && deadline && member.paidAt > deadline ? 30 : 0;
-        saveStateToCloud();
+        const saved = await saveStateToCloud(true);
+        if (!saved) return;
         renderRoster();
-        showToast(`${member.name} payment: ${member.paid ? `PAID (KSh ${50 + (member.lateFee || 0)})` : 'PENDING'}`);
       }
     }
 
@@ -1478,7 +1468,7 @@
       }
     }
 
-    function addManualMember() {
+    async function addManualMember() {
       const nameInput = document.getElementById('manualMemberName');
       const gwPointsInput = document.getElementById('manualMemberGw');
       const pointsInput = document.getElementById('manualMemberTotal');
@@ -1490,15 +1480,15 @@
         return;
       }
       state.members.push({ id: `member-${Date.now()}-${Math.random().toString(36).slice(2,9)}`, name, points, gwPoints, paid: false });
-      saveStateToCloud();
+      const saved = await saveStateToCloud(true);
+      if (!saved) return;
       renderRoster();
       if (nameInput) nameInput.value = '';
       if (gwPointsInput) gwPointsInput.value = '';
       if (pointsInput) pointsInput.value = '';
-      showToast(`Added ${name} to roster ⚽`);
     }
 
-    function addMember() {
+    async function addMember() {
       const nameInput = document.getElementById('newMemberName');
       const gwPointsInput = document.getElementById('newMemberGwPoints');
       const pointsInput = document.getElementById('newMemberPoints');
@@ -1520,31 +1510,28 @@
         paid: false,
       });
 
-      saveStateToCloud();
+      const saved = await saveStateToCloud(true);
+      if (!saved) return;
       renderRoster();
 
       nameInput.value = '';
       gwPointsInput.value = '';
       pointsInput.value = '';
-      showToast(`Added ${name} to roster ⚽`);
     }
 
-    function removeMember(id) {
-      const member = state.members.find(m => m.id === id);
-      const name = member ? member.name : 'this manager';
-
+    async function removeMember(id) {
       state.members = state.members.filter(m => m.id !== id);
-      saveStateToCloud();
+      const saved = await saveStateToCloud(true);
+      if (!saved) return;
       renderRoster();
-      showToast(`Removed ${name} from roster`);
     }
 
-    function clearEntireRoster() {
+    async function clearEntireRoster() {
       if (confirm('Are you sure you want to wipe the entire roster and start from scratch?')) {
         state.members = [];
-        saveStateToCloud();
+        const saved = await saveStateToCloud(true);
+        if (!saved) return;
         renderRoster();
-        showToast('Roster wiped clean. Build from scratch!');
       }
     }
 
@@ -1566,21 +1553,23 @@
         text: text,
       });
 
-      if(shared===null)saveStateToCloud();
+      if (shared === null) {
+        const saved = await saveStateToCloud(true);
+        if (!saved) return;
+      }
       renderTrashTalk();
 
       document.getElementById('trashAuthorInput').value = '';
       document.getElementById('trashTextInput').value = '';
-      if (!shared?.queued) showToast('Banter posted 🔥');
     }
 
-    function deleteTrashTalk(id) {
+    async function deleteTrashTalk(id) {
       const item = state.trashTalks.find(t => t.id === id);
       if (!item || !canDeleteOwnPost(item.author)) { showToast('Enter the manager name that authored this post to delete it'); return; }
       state.trashTalks = state.trashTalks.filter(t => t.id !== id);
-      saveStateToCloud();
+      const saved = await saveStateToCloud(true);
+      if (!saved) return;
       renderTrashTalk();
-      showToast('Banter deleted');
     }
 
     function renderTrashTalk() {
@@ -1634,21 +1623,23 @@
         text: text,
       });
 
-      if(shared===null)saveStateToCloud();
+      if (shared === null) {
+        const saved = await saveStateToCloud(true);
+        if (!saved) return;
+      }
       renderSuggestions();
 
       document.getElementById('sugAuthorInput').value = '';
       document.getElementById('sugTextInput').value = '';
-      if (!shared?.queued) showToast('Suggestion posted 💬');
     }
 
-    function deleteSuggestion(id) {
+    async function deleteSuggestion(id) {
       const item = state.suggestions.find(s => s.id === id);
       if (!item || !canDeleteOwnPost(item.author)) { showToast('Enter the manager name that authored this post to delete it'); return; }
       state.suggestions = state.suggestions.filter(s => s.id !== id);
-      saveStateToCloud();
+      const saved = await saveStateToCloud(true);
+      if (!saved) return;
       renderSuggestions();
-      showToast('Suggestion deleted');
     }
 
     function renderSuggestions() {
@@ -1794,8 +1785,8 @@
     }
 
     async function saveAllChanges(){if(!['admin','superadmin'].includes(state.accessMode))return;await saveStateToCloud(true)}
-    function saveTournament(){if(state.accessMode!=='superadmin')return;state.tournamentEntries=document.getElementById('tournamentInput').value.split(/\r?\n/).map(x=>{let a=x.split(',');return{name:(a[0]||'').trim(),points:+a[1]||0}}).filter(x=>x.name).sort((a,b)=>b.points-a.points);saveStateToCloud();renderActivities()}
-    function submitSwapRequest(){let a=document.getElementById('swapAuthor').value.trim(),d=document.getElementById('swapDetails').value.trim();if(!a||!d)return showToast('Enter your name and swap details');state.swapRequests.unshift({a,d});saveStateToCloud();renderActivities();showToast('Request sent')}
+    async function saveTournament(){if(state.accessMode!=='superadmin')return;state.tournamentEntries=document.getElementById('tournamentInput').value.split(/\r?\n/).map(x=>{let a=x.split(',');return{name:(a[0]||'').trim(),points:+a[1]||0}}).filter(x=>x.name).sort((a,b)=>b.points-a.points);const saved=await saveStateToCloud(true);if(saved)renderActivities()}
+    async function submitSwapRequest(){let a=document.getElementById('swapAuthor').value.trim(),d=document.getElementById('swapDetails').value.trim();if(!a||!d)return showToast('Enter your name and swap details');state.swapRequests.unshift({a,d});const saved=await saveStateToCloud(true);if(saved)renderActivities()}
     function escapeHTML(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
     function renderActivities(){let d=document.getElementById('tournamentDisplay');if(d)d.innerHTML=(state.tournamentEntries||[]).map((x,i)=>`<div>${i+1}. ${escapeHTML(x.name)} — ${Number(x.points||0).toLocaleString()}</div>`).join('')||'No standings entered yet';}
     async function saveGameweek(){state.gameweek=document.getElementById('gameweekInput').value.trim()||'Gameweek';document.getElementById('gameweekBadge').textContent=state.gameweek;await saveStateToCloud(true)}
@@ -1806,7 +1797,7 @@
     const priorSaveAll=saveAllChanges; saveAllChanges=async function(){if(!['admin','superadmin'].includes(state.accessMode))return;if(state.accessMode==='superadmin'){tagEditableNodes();document.querySelectorAll('.editable-node[data-save-key]').forEach(n=>state.customTexts[n.dataset.saveKey]=n.textContent);const title=document.querySelector('header h1 span');if(title){state.branding={...state.branding,title:title.textContent.trim()};document.title=state.branding.title}}await priorSaveAll()};
     const priorRenderRoster=renderRoster; renderRoster=function(){priorRenderRoster();document.querySelectorAll('.editable-node[data-save-key]').forEach(n=>{if(state.customTexts[n.dataset.saveKey]!==undefined)n.textContent=state.customTexts[n.dataset.saveKey]});const title=document.querySelector('header h1 span');if(title){state.branding={...state.branding,title:title.textContent.trim()};document.title=state.branding.title}};
     document.addEventListener('DOMContentLoaded',()=>{const main=document.querySelector('main');if(!main)return;const sections=[...main.children].filter(e=>e.tagName==='SECTION');if(sections.length>=3){const winner=sections[1],standings=sections[2];main.insertBefore(standings,winner)}});
-    saveTournament=async function(){if(state.accessMode!=='superadmin')return;state.tournamentEntries=document.getElementById('tournamentInput').value.split(/\r?\n/).map(x=>{let a=x.split(',');return{name:(a[0]||'').trim(),points:+a[1]||0}}).filter(x=>x.name).sort((a,b)=>b.points-a.points);state.tournamentRound=document.getElementById('tournamentRoundInput').value.trim();state.advancingNames=document.getElementById('advancingInput').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);await saveStateToCloud(true);renderActivities()};
+    saveTournament=async function(){if(state.accessMode!=='superadmin')return;state.tournamentEntries=document.getElementById('tournamentInput').value.split(/\r?\n/).map(x=>{let a=x.split(',');return{name:(a[0]||'').trim(),points:+a[1]||0}}).filter(x=>x.name).sort((a,b)=>b.points-a.points);state.tournamentRound=document.getElementById('tournamentRoundInput').value.trim();state.advancingNames=document.getElementById('advancingInput').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);const saved=await saveStateToCloud(true);if(saved)renderActivities()};
     const renderActivitiesBase=renderActivities;renderActivities=function(){renderActivitiesBase();const input=document.getElementById('tournamentRoundInput'),adv=document.getElementById('advancingInput');if(input&&document.activeElement!==input)input.value=state.tournamentRound||'';if(adv&&document.activeElement!==adv)adv.value=(state.advancingNames||[]).join('\n');const d=document.getElementById('tournamentDisplay');if(d&&(state.tournamentRound||state.advancingNames?.length)){const extra=`<div class="font-bold text-cyan-200">${escapeHTML(state.tournamentRound||'Current round')}</div>`+(state.advancingNames||[]).map((n,i)=>`<div>${i+1}. ${escapeHTML(n)} ${state.tournamentRound?.toLowerCase().includes('final')?'🏆':''}</div>`).join('');d.innerHTML=extra+d.innerHTML}};
 
     const showToastBase=showToast;showToast=function(message){showToastBase(message)};
@@ -1875,8 +1866,8 @@
     function shuffleManagers(names){const shuffled=[...names];for(let i=shuffled.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]]}return shuffled}
     function roundNameForEntrants(count){if(count<=2)return 'Final';if(count<=4)return 'Semi-final';if(count<=8)return 'Quarter-final';if(count<=16)return 'Round of 16';return `Round of ${count}`}
     function makeTournamentDraw(names){const shuffled=shuffleManagers(names),lowerPower=2**Math.floor(Math.log2(shuffled.length));if(shuffled.length===lowerPower)return{round:roundNameForEntrants(shuffled.length),byes:[],matches:Array.from({length:shuffled.length/2},(_,i)=>({round:roundNameForEntrants(shuffled.length),home:shuffled[i*2],homeScore:'',away:shuffled[i*2+1],awayScore:'',winner:''}))};const matchCount=shuffled.length-lowerPower,playing=shuffled.slice(0,matchCount*2),byes=shuffled.slice(matchCount*2);return{round:'Preliminary',byes,matches:Array.from({length:matchCount},(_,i)=>({round:'Preliminary',home:playing[i*2],homeScore:'',away:playing[i*2+1],awayScore:'',winner:''}))}}
-    function drawTournamentFixtures(){if(!['admin','superadmin'].includes(state.accessMode))return;const names=document.getElementById('tournamentParticipantsInput').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean),unique=new Set(names.map(x=>x.toLocaleLowerCase()));if(names.length<2){showToast('Enter at least two participants');return}if(unique.size!==names.length){showToast('Remove duplicate participant names before drawing');return}const draw=makeTournamentDraw(names);state.tournamentParticipants=names;state.tournamentByes=draw.byes;state.tournamentMatches=draw.matches;saveStateToCloud();renderActivities();showToast(`${draw.round} fixtures drawn`)}
-    function drawTournamentNextRound(){if(!['admin','superadmin'].includes(state.accessMode))return;const matches=state.tournamentMatches||[];if(!matches.length){showToast('Draw the opening fixtures first');return}const lastRound=matches[matches.length-1].round,current=matches.filter(m=>m.round===lastRound);if(current.some(m=>!m.winner||![m.home,m.away].includes(m.winner))){showToast(`Enter and save every ${lastRound} winner first`);return}const advancing=[...(state.tournamentByes||[]),...current.map(m=>m.winner)];if(advancing.length<2){showToast('The tournament winner is already decided');return}const draw=makeTournamentDraw(advancing);state.tournamentByes=draw.byes;state.tournamentMatches=[...matches,...draw.matches];saveStateToCloud();renderActivities();showToast(`${draw.round} fixtures drawn from the advancing managers`)}
+    async function drawTournamentFixtures(){if(!['admin','superadmin'].includes(state.accessMode))return;const names=document.getElementById('tournamentParticipantsInput').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean),unique=new Set(names.map(x=>x.toLocaleLowerCase()));if(names.length<2){showToast('Enter at least two participants');return}if(unique.size!==names.length){showToast('Remove duplicate participant names before drawing');return}const draw=makeTournamentDraw(names);state.tournamentParticipants=names;state.tournamentByes=draw.byes;state.tournamentMatches=draw.matches;const saved=await saveStateToCloud(true);if(saved)renderActivities()}
+    async function drawTournamentNextRound(){if(!['admin','superadmin'].includes(state.accessMode))return;const matches=state.tournamentMatches||[];if(!matches.length){showToast('Draw the opening fixtures first');return}const lastRound=matches[matches.length-1].round,current=matches.filter(m=>m.round===lastRound);if(current.some(m=>!m.winner||![m.home,m.away].includes(m.winner))){showToast(`Enter and save every ${lastRound} winner first`);return}const advancing=[...(state.tournamentByes||[]),...current.map(m=>m.winner)];if(advancing.length<2){showToast('The tournament winner is already decided');return}const draw=makeTournamentDraw(advancing);state.tournamentByes=draw.byes;state.tournamentMatches=[...matches,...draw.matches];const saved=await saveStateToCloud(true);if(saved)renderActivities()}
     function renderTournamentTables(){
       const groupHost=document.getElementById('tournamentGroupTable'),bracketHost=document.getElementById('tournamentBracket');if(!groupHost||!bracketHost)return;
       const rows=state.tournamentGroups||[];const grouped={};rows.forEach(row=>(grouped[row.group]||(grouped[row.group]=[])).push({...row,gd:row.gf-row.ga}));
@@ -1887,8 +1878,8 @@
       const gi=document.getElementById('tournamentGroupInput'),ki=document.getElementById('tournamentKnockoutInput'),pi=document.getElementById('tournamentParticipantsInput');if(gi&&document.activeElement!==gi)gi.value=rows.map(r=>[r.group,r.name,r.played,r.won,r.drawn,r.lost,r.gf,r.ga,r.points,r.totalFplPoints||0].join(', ')).join('\n');if(ki&&document.activeElement!==ki)ki.value=matches.map(m=>[m.round,m.home,m.homeScore,m.away,m.awayScore,m.winner].join(', ')).join('\n');if(pi&&document.activeElement!==pi)pi.value=(state.tournamentParticipants||[]).join('\n');
     }
     renderActivities=function(){renderTournamentTables();const host=document.getElementById('swapRequests');if(host){const requests=state.swapRequests||[];host.innerHTML=requests.length?requests.map((r,i)=>`<div class="flex items-start justify-between gap-2 rounded-lg border border-cardBorder bg-cardDark p-3 text-xs"><div><b class="text-white">${escapeHTML(r.a||r.author||'Manager')}</b><p class="mt-1 whitespace-pre-wrap text-slate-300">${escapeHTML(r.d||r.details||'')}</p></div>${['admin','superadmin'].includes(state.accessMode)?`<button onclick="deleteSwapRequest(${i})" class="shrink-0 font-bold text-rose-300">Delete</button>`:''}</div>`).join(''):'<p class="rounded-lg border border-dashed border-cardBorder p-3 text-xs text-slate-400">No swap requests yet.</p>'}};
-    async function submitSwapRequest(){const a=document.getElementById('swapAuthor').value.trim(),d=document.getElementById('swapDetails').value.trim();if(!a||!d){showToast('Enter your name and swap details');return;}const shared=await postMemberAction('swap-request',{author:a,text:d});if(shared===false)return;if(shared===null){state.swapRequests.unshift({a,d});saveStateToCloud();renderActivities()}document.getElementById('swapAuthor').value='';document.getElementById('swapDetails').value='';if(!shared?.queued)showToast('Swap request sent');}
-    function deleteSwapRequest(index){if(!['admin','superadmin'].includes(state.accessMode))return;state.swapRequests.splice(index,1);saveStateToCloud();renderActivities();showToast('Swap request deleted');}
+    async function submitSwapRequest(){const a=document.getElementById('swapAuthor').value.trim(),d=document.getElementById('swapDetails').value.trim();if(!a||!d){showToast('Enter your name and swap details');return;}const shared=await postMemberAction('swap-request',{author:a,text:d});if(shared===false)return;if(shared===null){state.swapRequests.unshift({a,d});const saved=await saveStateToCloud(true);if(!saved)return;renderActivities()}document.getElementById('swapAuthor').value='';document.getElementById('swapDetails').value='';if(shared?.queued)showToast('Swap request sent');}
+    async function deleteSwapRequest(index){if(!['admin','superadmin'].includes(state.accessMode))return;state.swapRequests.splice(index,1);const saved=await saveStateToCloud(true);if(saved)renderActivities()}
     if(!state.tournamentGroups)state.tournamentGroups=[];if(!state.tournamentMatches)state.tournamentMatches=[];
 
     function currentManagerName() { return sessionStorage.getItem('fpl_manager_identity') || ''; }
@@ -2089,9 +2080,9 @@
       if (!state.authorizedWinner) { showToast('Select an active manager to authorize'); return; }
       state.payoutConfirmedBy = '';
       state.payoutConfirmedAt = '';
-      await saveStateToCloud();
+      const saved = await saveStateToCloud(true);
+      if (!saved) return;
       renderPayoutControls();
-      showToast(`Payout authorized for ${state.authorizedWinner}`);
     }
 
     async function resetPayoutStatus() {
@@ -2100,9 +2091,9 @@
       state.payoutConfirmedBy = '';
       state.payoutConfirmedAt = '';
       clearPayoutAlert();
-      await saveStateToCloud();
+      const saved = await saveStateToCloud(true);
+      if (!saved) return;
       renderPayoutControls();
-      showToast('Payout status reset');
     }
 
     async function confirmPayoutReceipt() {
@@ -2127,7 +2118,6 @@
         audio.volume = 1.0;
         audio.classList.remove('hidden');
       }
-      showToast('Payout confirmation submitted');
     }
 
     function clearPayoutAlert() {
@@ -2148,7 +2138,7 @@
     const renderAppWithPayoutControls = renderApp;
     renderApp = function() { renderAppWithPayoutControls(); renderPayoutControls(); };
 
-    drawTournamentFixtures = function() {
+    drawTournamentFixtures = async function() {
       if (!['admin', 'superadmin'].includes(state.accessMode)) return;
       const names = document.getElementById('tournamentParticipantsInput').value.split(/\r?\n/).map(name => name.trim()).filter(Boolean);
       const unique = new Set(names.map(name => name.toLocaleLowerCase()));
@@ -2161,9 +2151,9 @@
       tournamentState.started = false;
       state.tournamentState = { ...tournamentState };
       updateKickoffButton();
-      saveStateToCloud();
+      const saved = await saveStateToCloud(true);
+      if (!saved) return;
       renderActivities();
-      showToast('Eight-manager quarter-final bracket drawn');
     };
 
     let tournamentState = { started: false };
@@ -2228,6 +2218,11 @@
           synchronizeRuntimeConfiguration();
           if (previousStarted !== tournamentState.started) renderActivities();
         })
+        .catch(error => {
+          if (!cloudErrorShown) console.error('Cloud state refresh failed:', error);
+          cloudErrorShown = true;
+          return false;
+        })
         .finally(() => { activeCloudStateLoad = null; });
       return activeCloudStateLoad;
     };
@@ -2251,8 +2246,7 @@
       document.querySelectorAll('.action-trigger-ready').forEach(button => button.remove());
       updateKickoffButton();
       renderActivities();
-      const saved = await saveStateToCloud();
-      if (saved) showToast('Tournament started');
+      await saveStateToCloud(true);
     }
 
     async function saveSuperAdminChanges() {
@@ -2274,7 +2268,7 @@
         if (!saved) return;
       } catch (error) {
         console.error('Super Admin state save failed:', error);
-        showToast(error.message || 'Configuration could not be saved.');
+        window.alert(error instanceof Error ? error.message : String(error));
       } finally {
         controls.forEach((control, index) => { control.disabled = priorDisabledStates[index]; });
         button.innerHTML = originalLabel;

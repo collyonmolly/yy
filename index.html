@@ -1044,13 +1044,17 @@
       }
       return response;
     }
-    function saveStateToCloud(showNotification = false) {
-      const savePromise = saveSharedState();
-      if (!showNotification) return savePromise;
-      return savePromise.then(saved => {
-        window.alert(saved ? 'Saved to Cloud successfully!' : 'Failed to save to cloud');
+    async function saveStateToCloud(showNotification = false) {
+      try {
+        const saved = await saveSharedState();
+        if (saved && showNotification) showToast('Saved publicly!');
         return saved;
-      });
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        console.error('Cloud state save failed:', error);
+        window.alert(message);
+        return false;
+      }
     }
     function storedAdminMode() {
       try {
@@ -1120,23 +1124,32 @@
 
     function saveSharedState() {
       const payload = JSON.parse(JSON.stringify(stateSnapshot()));
-      sharedSaveQueue = sharedSaveQueue.then(async () => {
-        try {
-          const response = await cloudRequest(CLOUD_STATE_CONFIG.saveMethod || 'PATCH', { payload });
-          if (response.status !== 200 && response.status !== 204) {
-            throw new Error(`Cloud save returned unexpected status (${response.status})`);
-          }
-          lastSharedPayload = payload;
-          hasLoadedSharedState = true;
-          cloudErrorShown = false;
-          renderPayoutControls();
-          return true;
-        } catch (error) {
-          console.error('Cloud state save failed:', error);
-          return false;
+      const savePromise = sharedSaveQueue.then(async () => {
+        const headers = new Headers(CLOUD_STATE_CONFIG.headers || {});
+        headers.set('apikey', '******');
+        headers.set('Authorization', '******');
+        headers.set('Accept', 'application/json');
+        headers.set('Content-Type', 'application/json');
+        headers.set('Prefer', 'resolution=merge-duplicates');
+        const response = await fetch(SUPABASE_STATE_URL, {
+          method: CLOUD_STATE_CONFIG.saveMethod || 'PATCH',
+          headers,
+          body: JSON.stringify({ payload }),
+          credentials: CLOUD_STATE_CONFIG.credentials || 'same-origin',
+          cache: 'no-store'
+        });
+        if (!response.ok) {
+          const detail = await response.text();
+          throw new Error(detail || response.statusText || `HTTP ${response.status}`);
         }
+        lastSharedPayload = payload;
+        hasLoadedSharedState = true;
+        cloudErrorShown = false;
+        renderPayoutControls();
+        return true;
       });
-      return sharedSaveQueue;
+      sharedSaveQueue = savePromise.then(() => undefined, () => undefined);
+      return savePromise;
     }
 
     function changeAccessMode(mode) {
@@ -1408,14 +1421,13 @@
       const saved = await saveStateToCloud(true);
       if (!saved) return;
       renderApp();
-      showToast('Winner published 👑');
     }
 
-    function saveRules() {
+    async function saveRules() {
       state.rulesText = document.getElementById('rulesInput').value.trim();
-      saveStateToCloud(true);
+      const saved = await saveStateToCloud(true);
+      if (!saved) return;
       renderApp();
-      showToast('Rules saved 📖');
     }
 
     async function saveContribDetails() {
@@ -1424,14 +1436,13 @@
       const saved = await saveStateToCloud(true);
       if (!saved) return;
       renderApp();
-      showToast('Contribution details saved 💳');
     }
 
-    function saveSupportDetails() {
+    async function saveSupportDetails() {
       state.supportPhone = document.getElementById('supportPhoneInput').value.trim();
-      saveStateToCloud(true);
+      const saved = await saveStateToCloud(true);
+      if (!saved) return;
       renderApp();
-      showToast('Support details saved 🤝');
     }
 
     async function saveAnnouncement() {
@@ -1446,25 +1457,24 @@
       if (!saved) return;
       renderApp();
       showAdminAlertPopup('Attention! Admin has made some announcements.');
-      showToast('Announcement broadcasted');
     }
 
-    function saveProofVault() {
+    async function saveProofVault() {
       state.proofText = document.getElementById('proofTextInput').value.trim();
       const fileInput = document.getElementById('proofImageInput');
       if (fileInput.files && fileInput.files[0]) {
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = async function(e) {
           state.proofImageData = e.target.result;
-          saveStateToCloud(true);
+          const saved = await saveStateToCloud(true);
+          if (!saved) return;
           renderApp();
-          showToast('Proof image uploaded to vault 🛡️');
         };
         reader.readAsDataURL(fileInput.files[0]);
       } else {
-        saveStateToCloud(true);
+        const saved = await saveStateToCloud(true);
+        if (!saved) return;
         renderApp();
-        showToast('Proof text saved to vault 🛡️');
       }
     }
 
@@ -1783,12 +1793,12 @@
       }, 3000);
     }
 
-    async function saveAllChanges(){if(!['admin','superadmin'].includes(state.accessMode))return;const saved=await saveStateToCloud(true);if(saved)showToast('Saved to public')}
+    async function saveAllChanges(){if(!['admin','superadmin'].includes(state.accessMode))return;await saveStateToCloud(true)}
     function saveTournament(){if(state.accessMode!=='superadmin')return;state.tournamentEntries=document.getElementById('tournamentInput').value.split(/\r?\n/).map(x=>{let a=x.split(',');return{name:(a[0]||'').trim(),points:+a[1]||0}}).filter(x=>x.name).sort((a,b)=>b.points-a.points);saveStateToCloud();renderActivities()}
     function submitSwapRequest(){let a=document.getElementById('swapAuthor').value.trim(),d=document.getElementById('swapDetails').value.trim();if(!a||!d)return showToast('Enter your name and swap details');state.swapRequests.unshift({a,d});saveStateToCloud();renderActivities();showToast('Request sent')}
     function escapeHTML(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
     function renderActivities(){let d=document.getElementById('tournamentDisplay');if(d)d.innerHTML=(state.tournamentEntries||[]).map((x,i)=>`<div>${i+1}. ${escapeHTML(x.name)} — ${Number(x.points||0).toLocaleString()}</div>`).join('')||'No standings entered yet';}
-    function saveGameweek(){state.gameweek=document.getElementById('gameweekInput').value.trim()||'Gameweek';document.getElementById('gameweekBadge').textContent=state.gameweek;saveStateToCloud();showToast('Gameweek saved')}
+    async function saveGameweek(){state.gameweek=document.getElementById('gameweekInput').value.trim()||'Gameweek';document.getElementById('gameweekBadge').textContent=state.gameweek;await saveStateToCloud(true)}
     const priorRenderForGameweek=renderApp; renderApp=function(){priorRenderForGameweek();const b=document.getElementById('gameweekBadge');if(b)b.textContent=state.gameweek||'GW 1-38 Active';const i=document.getElementById('gameweekInput');if(i)i.value=state.gameweek||'Gameweek 1';renderActivities()};
     state.customTexts=state.customTexts||{};
     function tagEditableNodes(){document.querySelectorAll('.editable-node').forEach((n,i)=>{if(!n.dataset.saveKey&&!n.closest('#trashFeed,#suggestionFeed'))n.dataset.saveKey='text-'+i})}
@@ -1796,7 +1806,7 @@
     const priorSaveAll=saveAllChanges; saveAllChanges=async function(){if(!['admin','superadmin'].includes(state.accessMode))return;if(state.accessMode==='superadmin'){tagEditableNodes();document.querySelectorAll('.editable-node[data-save-key]').forEach(n=>state.customTexts[n.dataset.saveKey]=n.textContent);const title=document.querySelector('header h1 span');if(title){state.branding={...state.branding,title:title.textContent.trim()};document.title=state.branding.title}}await priorSaveAll()};
     const priorRenderRoster=renderRoster; renderRoster=function(){priorRenderRoster();document.querySelectorAll('.editable-node[data-save-key]').forEach(n=>{if(state.customTexts[n.dataset.saveKey]!==undefined)n.textContent=state.customTexts[n.dataset.saveKey]});const title=document.querySelector('header h1 span');if(title){state.branding={...state.branding,title:title.textContent.trim()};document.title=state.branding.title}};
     document.addEventListener('DOMContentLoaded',()=>{const main=document.querySelector('main');if(!main)return;const sections=[...main.children].filter(e=>e.tagName==='SECTION');if(sections.length>=3){const winner=sections[1],standings=sections[2];main.insertBefore(standings,winner)}});
-    const saveTournamentBase=saveTournament;saveTournament=function(){saveTournamentBase();state.tournamentRound=document.getElementById('tournamentRoundInput').value.trim();state.advancingNames=document.getElementById('advancingInput').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);saveStateToCloud();renderActivities();showToast('Round progression saved')};
+    saveTournament=async function(){if(state.accessMode!=='superadmin')return;state.tournamentEntries=document.getElementById('tournamentInput').value.split(/\r?\n/).map(x=>{let a=x.split(',');return{name:(a[0]||'').trim(),points:+a[1]||0}}).filter(x=>x.name).sort((a,b)=>b.points-a.points);state.tournamentRound=document.getElementById('tournamentRoundInput').value.trim();state.advancingNames=document.getElementById('advancingInput').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);await saveStateToCloud(true);renderActivities()};
     const renderActivitiesBase=renderActivities;renderActivities=function(){renderActivitiesBase();const input=document.getElementById('tournamentRoundInput'),adv=document.getElementById('advancingInput');if(input&&document.activeElement!==input)input.value=state.tournamentRound||'';if(adv&&document.activeElement!==adv)adv.value=(state.advancingNames||[]).join('\n');const d=document.getElementById('tournamentDisplay');if(d&&(state.tournamentRound||state.advancingNames?.length)){const extra=`<div class="font-bold text-cyan-200">${escapeHTML(state.tournamentRound||'Current round')}</div>`+(state.advancingNames||[]).map((n,i)=>`<div>${i+1}. ${escapeHTML(n)} ${state.tournamentRound?.toLowerCase().includes('final')?'🏆':''}</div>`).join('');d.innerHTML=extra+d.innerHTML}};
 
     const showToastBase=showToast;showToast=function(message){showToastBase(message)};
@@ -1860,7 +1870,7 @@
       state.tournamentMatches=document.getElementById('tournamentKnockoutInput').value.split(/\r?\n/).map(line=>{const p=line.split(',').map(x=>x.trim());if(p.length<6||!p[1]||!p[3])return null;return{round:p[0],home:p[1],homeScore:Number(p[2])||0,away:p[3],awayScore:Number(p[4])||0,winner:p[5]};}).filter(Boolean);
       renderActivities();
       const saved = await saveStateToCloud(true);
-      if (saved) showToast('Tournament standings saved');
+      if (!saved) return;
     }
     function shuffleManagers(names){const shuffled=[...names];for(let i=shuffled.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]]}return shuffled}
     function roundNameForEntrants(count){if(count<=2)return 'Final';if(count<=4)return 'Semi-final';if(count<=8)return 'Quarter-final';if(count<=16)return 'Round of 16';return `Round of ${count}`}
@@ -1906,8 +1916,7 @@
       }).filter(Boolean);
       state.saviorEntries = parsed;
       renderSaviorTable();
-      const saved = await saveStateToCloud(true);
-      if (saved) showToast('Savior activity saved');
+      await saveStateToCloud(true);
     }
 
     function bracketMatchCard(match, title) {
@@ -2126,13 +2135,12 @@
       if (modal) modal.classList.add('hidden');
     }
 
-    function saveGameweek() {
+    async function saveGameweek() {
       if (!['admin', 'superadmin'].includes(state.accessMode)) return;
       state.gameweek = document.getElementById('gameweekInput').value.trim() || 'Gameweek';
       const badge = document.getElementById('gameweekBadge');
       if (badge) badge.textContent = state.gameweek;
-      saveStateToCloud();
-      showToast('Gameweek saved');
+      await saveStateToCloud(true);
     }
 
     const renderRosterWithPayoutOptions = renderRoster;
@@ -2262,9 +2270,8 @@
         controls.forEach(control => { control.disabled = true; });
         button.innerHTML = 'Saving... <span class="spinner-icon" aria-hidden="true">🔄</span>';
         state.tournamentState = { ...tournamentState };
-        const saved = await saveStateToCloud();
+        const saved = await saveStateToCloud(true);
         if (!saved) return;
-        showToast('Saved to public');
       } catch (error) {
         console.error('Super Admin state save failed:', error);
         showToast(error.message || 'Configuration could not be saved.');

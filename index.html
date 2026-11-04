@@ -952,16 +952,24 @@
   <script>
     // FPL COMMUNITY is a clean, single-page HTML app owned by Admin collyonmolly.
     // Keep private provider keys on the server; only use public-safe credentials with server-side policies.
-    // Shared application data is stored in the fpl_state table's payload column.
+    // Shared application data is stored in the fpl_site_state table's payload column.
     let lastSharedPayload = null;
     let hasLoadedSharedState = false;
+    let usingDefaultRosterFallback = false;
     let sharedSaveQueue = Promise.resolve();
     let cloudErrorShown = false;
     let pendingCloudRuntimeConfig = null;
     let lastAnnouncementId = null;
     let lastPayoutAlertAt = null;
-    const SUPABASE_STATE_URL = 'https://oxkayvcndarwktxxheka.supabase.co/rest/v1/fpl_state?id=eq.global_state';
+    const SUPABASE_STATE_URL = 'https://oxkayvcndarwktxxheka.supabase.co/rest/v1/fpl_site_state?id=eq.true';
     const SUPABASE_PUBLIC_KEY = 'sb_publishable_K-xL71azWedkpVQ2vDrt4A_k7ytNvLl';
+    const DEFAULT_MEMBERS = [
+      { id: '1', name: 'collins waweru', points: 142, gwPoints: 88, paid: true },
+      { id: '2', name: 'bennedict kinuthia', points: 128, gwPoints: 65, paid: true },
+      { id: '3', name: 'emmanuel muriithi', points: 115, gwPoints: 58, paid: false },
+      { id: '4', name: 'brian muchiiri', points: 110, gwPoints: 42, paid: true },
+      { id: '5', name: 'mark maina', points: 85, gwPoints: 31, paid: false }
+    ];
     let state = {
       accessMode: 'member', // 'member', 'admin', 'superadmin'
       gameweek: 'Gameweek 1', tournamentEntries: [], tournamentParticipants: [], tournamentByes: [], tournamentGroups: [], tournamentMatches: [], swapRequests: [], saviorEntries: [], announcementLedger: [],
@@ -986,13 +994,7 @@
       rulesText: `1. All members must submit their KSh 50 contribution before the Gameweek deadline.\n2. The Gameweek winner with the highest score takes the designated weekly pot.\n3. Ranking ties will share the week's pot equally.\n4. Ensure your payment is verified by Admin for payment tick approvals.\n5. Have fun, support each other, and enjoy the Premier League season! ⚽🔥`,
       suggestions: [],
       trashTalks: [],
-      members: [
-        { id: '1', name: 'collins waweru', points: 142, gwPoints: 88, paid: true },
-        { id: '2', name: 'bennedict kinuthia', points: 128, gwPoints: 65, paid: true },
-        { id: '3', name: 'emmanuel muriithi', points: 115, gwPoints: 58, paid: false },
-        { id: '4', name: 'brian muchiiri', points: 110, gwPoints: 42, paid: true },
-        { id: '5', name: 'mark maina', points: 85, gwPoints: 31, paid: false }
-      ]
+      members: DEFAULT_MEMBERS.map(member => ({ ...member }))
     };
 
     window.onload = async function() {
@@ -1031,7 +1033,7 @@
       headers.set('Authorization', `Bearer ${SUPABASE_PUBLIC_KEY}`);
       headers.set('Accept', 'application/json');
       if (payload !== undefined) headers.set('Content-Type', 'application/json');
-      if (method === 'PATCH') headers.set('Prefer', 'return=minimal');
+      if (method === 'PATCH') headers.set('Prefer', 'return=representation');
       const options = {
         method,
         headers,
@@ -1054,7 +1056,8 @@
         return saved;
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
-        console.error('Cloud state save failed:', error);
+        if (!cloudErrorShown) console.error('Cloud state save failed:', error);
+        cloudErrorShown = true;
         window.alert(message);
         return false;
       }
@@ -1085,7 +1088,6 @@
         const row = Array.isArray(returned) ? returned[0] : returned;
         const payload = row && row.payload && typeof row.payload === 'object' ? row.payload : row;
         if (!payload || typeof payload !== 'object' || Array.isArray(payload)) throw new Error('Cloud GET returned an invalid state object');
-        if (!Object.keys(payload).length) throw new Error('Cloud GET returned an empty state object');
         cloudErrorShown = false;
         pendingCloudRuntimeConfig = extractCloudRuntimeConfig(payload);
         const firstLoad = !hasLoadedSharedState;
@@ -1098,12 +1100,20 @@
         const priorPayoutAt = lastPayoutAlertAt;
         state = { ...state, ...payload, accessMode: state.accessMode };
         state.members = Array.isArray(state.members) ? state.members : [];
+        if (firstLoad && state.members.length === 0) {
+          state.members = DEFAULT_MEMBERS.map(member => ({ ...member }));
+          usingDefaultRosterFallback = true;
+        } else if (usingDefaultRosterFallback && state.members.length === 0) {
+          state.members = DEFAULT_MEMBERS.map(member => ({ ...member }));
+        } else if (state.members.length > 0) {
+          usingDefaultRosterFallback = false;
+        }
         state.suggestions = Array.isArray(state.suggestions) ? state.suggestions : [];
         state.trashTalks = Array.isArray(state.trashTalks) ? state.trashTalks : [];
         state.announcementLedger = Array.isArray(state.announcementLedger) ? state.announcementLedger : [];
         state.saviorEntries = Array.isArray(state.saviorEntries) ? state.saviorEntries : [];
         state.tournamentReadyActions = Array.isArray(state.tournamentReadyActions) ? state.tournamentReadyActions : [];
-        lastSharedPayload = stateSnapshot();
+        lastSharedPayload = payload;
         hasLoadedSharedState = true;
         lastAnnouncementId = state.announcementLedger.length ? state.announcementLedger[state.announcementLedger.length - 1].id : null;
         lastPayoutAlertAt = state.payoutConfirmedAt || null;
@@ -1131,9 +1141,18 @@
     function saveSharedState() {
       const payload = JSON.parse(JSON.stringify(stateSnapshot()));
       const savePromise = sharedSaveQueue.then(async () => {
-        await cloudRequest('PATCH', { payload });
+        const response = await cloudRequest('PATCH', { payload });
+        if (response.status === 204) {
+          throw new Error('Supabase accepted the save but did not confirm the updated state row.');
+        }
+        const returned = await response.json();
+        const row = Array.isArray(returned) ? returned.find(item => item && item.id === true) : null;
+        if (!row || stableStateJSON(row.payload) !== stableStateJSON(payload)) {
+          throw new Error('Supabase did not confirm the saved state payload.');
+        }
         lastSharedPayload = payload;
         hasLoadedSharedState = true;
+        usingDefaultRosterFallback = false;
         cloudErrorShown = false;
         renderPayoutControls();
         return true;
@@ -1367,27 +1386,28 @@
       }
     }
 
-    function updateMemberName(id, val) {
+    async function updateMemberName(id, val) {
       const member = state.members.find(m => m.id === id);
       if (member) {
         member.name = val.trim();
-        saveStateToCloud();
+        await saveStateToCloud(true);
       }
     }
 
-    function updateMemberGwPoints(id, val) {
+    async function updateMemberGwPoints(id, val) {
       const member = state.members.find(m => m.id === id);
       if (member) {
         member.gwPoints = parseInt(val) || 0;
-        saveStateToCloud();
+        await saveStateToCloud(true);
       }
     }
 
-    function updateMemberTotalPoints(id, val) {
+    async function updateMemberTotalPoints(id, val) {
       const member = state.members.find(m => m.id === id);
       if (member) {
         member.points = parseInt(val) || 0;
-        saveStateToCloud();
+        const saved = await saveStateToCloud(true);
+        if (!saved) return;
         renderRoster();
       }
     }
@@ -1677,9 +1697,9 @@
 
     async function updateCountdownTarget() {
       state.countdownTarget = document.getElementById('countdownInput').value;
-      const saved = await saveStateToCloud();
+      const saved = await saveStateToCloud(true);
       updateCountdownDisplay();
-      if (saved) showToast(state.countdownTarget ? 'Gameweek deadline saved' : 'Gameweek deadline cleared');
+      if (!saved) return;
     }
 
     function startCountdownTimer() {
@@ -1972,8 +1992,7 @@
       const action = { userId: identity.userId, status: 'ready', timestamp: Date.now() };
       state.tournamentReadyActions = Array.isArray(state.tournamentReadyActions) ? state.tournamentReadyActions : [];
       state.tournamentReadyActions.push(action);
-      const saved = await saveStateToCloud();
-      if (saved) showToast(identity.simulated ? `Ready recorded for ${identity.userId} (simulation)` : 'Ready status recorded');
+      await saveStateToCloud(true);
     }
 
     document.getElementById('tournamentBracket')?.addEventListener('click', event => {
@@ -2283,6 +2302,5 @@
 
   </script>
 
-  <script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}))}</script>
 </body>
 </html>

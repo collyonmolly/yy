@@ -962,7 +962,7 @@
     let lastAnnouncementId = null;
     let lastPayoutAlertAt = null;
      
-    const SUPABASE_STATE_URL = 'https://oxkayvcndarwktxxheka.supabase.co/rest/v1/fpl_site_state';
+    const SUPABASE_STATE_URL = 'https://oxkayvcndarwktxxheka.supabase.co/rest/v1/fpl_site_state?id=eq.true&select=payload';
    
     const SUPABASE_PUBLIC_KEY = 'sb_publishable_K-xL71azWedkpVQ2vDrt4A_k7ytNvLl';
     const DEFAULT_MEMBERS = [
@@ -1224,7 +1224,7 @@
       document.getElementById('supportPhoneDisplay').textContent = state.supportPhone || 'Not Set Yet';
       document.getElementById('supportPhoneInput').value = state.supportPhone || '';
 
-      document.getElementById('winnerNameDisplay').textContent = state.winnerName || 'Gemini';
+      document.getElementById('winnerNameDisplay').textContent = state.winnerName || 'collins waweru';
       document.getElementById('winnerPointsDisplay').textContent = (state.winnerPoints || 0).toLocaleString();
       document.getElementById('winnerNameInput').value = state.winnerName || '';
       document.getElementById('winnerPointsInput').value = state.winnerPoints || '';

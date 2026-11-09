@@ -1428,7 +1428,7 @@
     }
 
     async function saveWinnerDetails() {
-      state.winnerName = document.getElementById('winnerNameInput').value.trim() || 'Gemini';
+      state.winnerName = document.getElementById('winnerNameInput').value.trim() || 'collins waweru';
       state.winnerPoints = parseInt(document.getElementById('winnerPointsInput').value) || 0;
       const saved = await saveStateToCloud(true);
       if (!saved) return;

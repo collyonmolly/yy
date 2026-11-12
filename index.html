@@ -12,7 +12,7 @@
   <!-- Google Fonts & Font Awesome Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <script>
@@ -24,19 +24,19 @@
       theme: {
         extend: {
           colors: {
-            pitchDark: '#070913',
-            cardDark: '#0e1326',
-            cardBorder: 'rgba(168, 85, 247, 0.3)',
-            emeraldGlow: '#8b5cf6',
-            emeraldNeon: '#06b6d4',
-            roseHot: '#ff007f',
-            goldRoyal: '#fbbf24',
-            goldLight: '#fef08a',
-            skyBright: '#38bdf8',
-            purpleGlow: '#a855f7',
-            electricCyan: '#00f0ff',
-            neonViolet: '#a855f7',
-            sunsetPink: '#f43f5e',
+            pitchDark: '#18001B',
+            cardDark: '#28002B',
+            cardBorder: 'rgba(255, 255, 255, 0.16)',
+            emeraldGlow: '#00FF87',
+            emeraldNeon: '#00FF87',
+            roseHot: '#FF2882',
+            goldRoyal: '#FF2882',
+            goldLight: '#FFFFFF',
+            skyBright: '#05F0FF',
+            purpleGlow: '#37003C',
+            electricCyan: '#05F0FF',
+            neonViolet: '#37003C',
+            sunsetPink: '#FF2882',
           },
           fontFamily: {
             sans: ['Plus Jakarta Sans', 'sans-serif'],
@@ -75,14 +75,14 @@
       width: 6px;
     }
     ::-webkit-scrollbar-track {
-      background: #070913;
+      background: #18001B;
     }
     ::-webkit-scrollbar-thumb {
-      background: #a855f7;
+      background: #3D0042;
       border-radius: 3px;
     }
     ::-webkit-scrollbar-thumb:hover {
-      background: #06b6d4;
+      background: #00FF87;
     }
 
     /* Vibrant Midnight Aurora Background */
@@ -146,8 +146,8 @@
     }
     .admin-alert-card {
       width: min(92vw, 440px);
-      background: linear-gradient(135deg, rgba(168, 85, 247, 0.22), rgba(6, 182, 212, 0.18), rgba(14, 19, 38, 0.96));
-      border: 1px solid rgba(6, 182, 212, 0.7);
+      background: linear-gradient(135deg, rgba(61, 0, 66, 0.96), rgba(40, 0, 43, 0.98));
+      border: 1px solid rgba(5, 240, 255, 0.7);
       border-radius: 1.25rem;
       box-shadow: 0 22px 70px rgba(0,0,0,0.6);
       padding: 1.25rem;
@@ -169,8 +169,8 @@
       gap: 0.75rem;
     }
     .share-link-input {
-      background: rgba(7, 9, 19, 0.9);
-      border: 1px solid rgba(6, 182, 212, 0.35);
+      background: #18001B;
+      border: 1px solid rgba(255,255,255,.16);
       border-radius: 0.75rem;
       color: #dbeafe;
       width: 100%;
@@ -189,18 +189,18 @@
       min-width: 930px;
     }
     .bracket-wing { display: grid; grid-template-rows: 1fr 1fr; gap: 1.5rem; position: relative; }
-    .bracket-wing::before { content: ""; position: absolute; top: 25%; bottom: 25%; width: 1px; background: rgba(251,191,36,.65); }
+    .bracket-wing::before { content: ""; position: absolute; top: 25%; bottom: 25%; width: 1px; background: rgba(5,240,255,.55); }
     .bracket-wing.left::before { right: -0.75rem; }
     .bracket-wing.right::before { left: -0.75rem; }
     .bracket-match {
       position: relative;
-      border: 1px solid rgba(168,85,247,.45);
+      border: 0;
       border-radius: .75rem;
-      background: rgba(7,9,19,.92);
+      background: #28002B;
       padding: .65rem;
       min-height: 4.25rem;
     }
-    .bracket-match::after { content: ""; position: absolute; top: 50%; width: .8rem; border-top: 1px solid rgba(251,191,36,.65); }
+    .bracket-match::after { content: ""; position: absolute; top: 50%; width: .8rem; border-top: 1px solid rgba(5,240,255,.55); }
     .bracket-wing.left .bracket-match::after { right: -.8rem; }
     .bracket-wing.right .bracket-match::after { left: -.8rem; }
     .bracket-semi { position: relative; display: grid; gap: 3rem; }
@@ -208,14 +208,14 @@
     .bracket-semi.left .bracket-match::after { right: -.8rem; }
     .bracket-semi.right .bracket-match::after { left: -.8rem; }
     .bracket-final {
-      border: 1px solid rgba(251,191,36,.75);
+      border: 0;
       border-radius: 1rem;
-      background: linear-gradient(145deg, rgba(251,191,36,.15), rgba(14,19,38,.96));
+      background: #28002B;
       padding: 1rem;
       text-align: center;
-      box-shadow: 0 0 32px rgba(251,191,36,.13);
+      box-shadow: none;
     }
-    .bracket-link { height: 1px; background: rgba(251,191,36,.65); }
+    .bracket-link { height: 1px; background: rgba(5,240,255,.55); }
     .announcement-pop { animation: announcementPop .45s cubic-bezier(.16,1,.3,1) both; }
     @keyframes announcementPop { from { opacity: 0; transform: scale(.88) translateY(12px); } to { opacity: 1; transform: scale(1) translateY(0); } }
     .payout-audio { width: 100%; }
@@ -239,10 +239,10 @@
   </style>
   <style>
     :root {
-      --epl-bg-dark: #111111;
-      --epl-purple-main: #3D195D;
+      --epl-bg-dark: #18001B;
+      --epl-purple-main: #28002B;
       --epl-accent-green: #00FF87;
-      --epl-admin-pink: #E90052;
+      --epl-admin-pink: #FF2882;
       --epl-text-light: #FFFFFF;
       --epl-text-muted: #CCCCCC;
     }
@@ -288,8 +288,206 @@
       to { transform: rotate(360deg); }
     }
   </style>
+  <style>
+    :root {
+      --epl-deep: #18001B;
+      --epl-purple: #28002B;
+      --epl-plum: #3D0042;
+      --epl-plum-dark: #37003C;
+      --epl-white: #FFFFFF;
+      --epl-green: #00FF87;
+      --epl-cyan: #05F0FF;
+      --epl-pink: #FF2882;
+    }
+    html, body { min-height: 100%; background: var(--epl-deep) !important; }
+    body, body * { font-family: "Plus Jakarta Sans", sans-serif; }
+    body { color: var(--epl-white) !important; background-image: none !important; animation: none !important; }
+    body.welcome-mode { overflow: hidden; }
+    body.welcome-mode > header, body.welcome-mode > nav, body.welcome-mode > main,
+    body.welcome-mode #toastContainer, body.welcome-mode #saveAllButton { visibility: hidden; }
+    .glass-panel, .glass-panel-gold, .glass-panel-rose, .glass-panel-amber, .rule-card,
+    .member-list-panel { background: var(--epl-purple) !important; border: 0 !important; box-shadow: none !important; }
+    .glass-panel-gold, .glass-panel-rose, .glass-panel-amber { backdrop-filter: none !important; }
+    main { width: 100% !important; max-width: none !important; margin: 0 !important; padding: 1rem 8px 6rem !important; }
+    main > *, main section, main article { max-width: 100%; }
+    main section { border: 0 !important; }
+    table { width: 100%; border-collapse: collapse; color: var(--epl-white); font-size: 15px !important; }
+    #bodyRoot table, #bodyRoot table th, #bodyRoot table td, #bodyRoot table th *, #bodyRoot table td * {
+      font-size: 15px !important; font-variant-numeric: tabular-nums;
+    }
+    table th, table td { border-left: 0 !important; border-right: 0 !important; color: var(--epl-white); }
+    table th { font-weight: 700 !important; letter-spacing: .02em; text-transform: uppercase; }
+    table td { font-weight: 700; }
+    #rosterTableBody td:nth-child(4), #rosterTableBody td:nth-child(4) *,
+    #rosterTableBody td:nth-child(5), #rosterTableBody td:nth-child(5) *,
+    #tournamentGroupTable td:last-child, #benchSwapTableBody td:nth-child(5),
+    #saviorTableBody td:nth-child(3), #saviorTableBody td:nth-child(4) { color: var(--epl-cyan) !important; }
+    #rosterTableBody input[type="number"] { color: var(--epl-cyan) !important; }
+    table td:not(:nth-child(2)) { font-variant-numeric: tabular-nums; }
+    table td:nth-child(2) { font-weight: 600; }
+    #bodyRoot table input { font-size: 15px !important; font-variant-numeric: tabular-nums; }
+    .dashboard-table-title, .epl-navbar, .tournament-card-header, .fun-activities-header {
+      background: var(--epl-purple) !important; color: var(--epl-white) !important;
+    }
+    .epl-navbar { display: none !important; }
+    main button:not(.epl-btn-primary):not(.action-trigger-ready):not(.text-delete-control) {
+      background-color: var(--epl-plum-dark); color: var(--epl-white);
+    }
+    main .paid-badge { color: var(--epl-green) !important; background: transparent !important; border: 0 !important; }
+    #league > div:first-child, #payments > div:first-child, #transparencyProof > div:first-child,
+    #community > div:first-child { border-color: transparent !important; }
+    .text-slate-100, .text-slate-200, .text-slate-300, .text-slate-400,
+    .text-purple-100, .text-purple-200, .text-purple-300, .text-cyan-100,
+    .text-cyan-200, .text-cyan-300, .text-amber-100, .text-amber-200,
+    .text-amber-300, .text-rose-100, .text-rose-200, .text-rose-300,
+    .text-violet-100, .text-violet-200, .text-violet-300, .text-sky-300,
+    .text-emerald-300 { color: var(--epl-white) !important; }
+    main h2 { font-size: 22px !important; font-weight: 800 !important; letter-spacing: -.02em !important; text-transform: none !important; }
+    main [class*="rounded-2xl"], main [class*="rounded-xl"] { box-shadow: none !important; }
+    main [class*="shadow-"] { box-shadow: none !important; }
+    main [class*="border-"] { border-color: transparent !important; }
+    .text-electricCyan, #winnerPointsDisplay, #gameweekBadge, #days, #hours, #minutes, #seconds {
+      color: var(--epl-cyan) !important;
+    }
+    .text-roseHot, .text-rose-500, .text-rose-600 { color: var(--epl-pink) !important; }
+    #rosterTableBody span.text-cyan-300 { color: var(--epl-green) !important; }
+    [class*="bg-roseHot/10"], [class*="bg-rose-500/10"] { color: var(--epl-pink) !important; }
+    #winnerNameDisplay + span, .fa-crown { color: var(--epl-pink); }
+    .bg-cyan-400, .bg-cyan-500, .epl-btn-primary, .action-trigger-ready {
+      background-color: var(--epl-green) !important; color: var(--epl-deep) !important; border: 0 !important;
+    }
+    #paymentProgressBar { background: var(--epl-green) !important; }
+    header {
+      position: sticky; top: 0; z-index: 45; background: var(--epl-purple) !important;
+      border: 0 !important; box-shadow: none !important;
+    }
+    header::after {
+      content: ""; display: block; height: 3px;
+      background: linear-gradient(90deg, var(--epl-cyan), var(--epl-green));
+    }
+    .epl-header-row {
+      position: relative; min-height: 58px; display: flex; align-items: center; gap: 14px; padding: 8px 12px 8px 56px;
+    }
+    .epl-header-title { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+    .epl-header-title h1 { margin: 0; color: #fff; font-size: 16px; font-weight: 800; line-height: 1.1; }
+    .epl-header-title small { display: block; color: #fff; font-size: 10px; font-weight: 700; }
+    .epl-icon-button, .epl-welcome-button {
+      border: 0; background: transparent; color: #fff; cursor: pointer; font-size: 23px;
+      line-height: 1; padding: 7px;
+    }
+    .epl-header-row > .epl-icon-button[aria-label="Open menu"] {
+      position: absolute; left: 8px; top: 50%; z-index: 9999; transform: translateY(-50%);
+      color: #FFFFFF; font-size: 26px;
+    }
+    .epl-welcome-menu-button {
+      position: fixed; top: 12px; left: 12px; z-index: 9999; color: #FFFFFF; font-size: 26px;
+    }
+    @keyframes carouselTapFlash {
+      0%, 100% { color: #FFFFFF; }
+      45% { color: var(--epl-green); }
+    }
+    #welcomeCarouselTrack button.tapped { animation: carouselTapFlash .45s ease-out; }
+    main .epl-btn-primary, main .action-trigger-ready {
+      background-color: var(--epl-green) !important; color: var(--epl-deep) !important;
+    }
+    .epl-welcome-button { font-size: 12px; font-weight: 700; white-space: nowrap; }
+    #crownMark { color: #FFD76A !important; font-size: 24px; padding: 0; }
+    #eplBottomNav {
+      position: fixed; inset: auto 0 0; z-index: 45; padding: 5px 4px env(safe-area-inset-bottom);
+      background: var(--epl-purple); border-top: 1px solid rgba(255,255,255,.16);
+    }
+    #eplBottomNav .bottom-nav-grid { display: grid; grid-template-columns: repeat(5,1fr); max-width: 740px; margin: auto; }
+    #eplBottomNav button {
+      background: transparent; border: 0; min-height: 42px; color: #fff; font-size: 10px;
+      font-weight: 700; cursor: pointer;
+    }
+    #eplBottomNav button.active { color: var(--epl-green); }
+    .epl-overlay {
+      position: fixed; inset: 0; z-index: 10000; display: none; overflow-y: auto;
+      background: var(--epl-purple); color: #fff;
+    }
+    .epl-overlay.open { display: block; }
+    #eplMenuOverlay { padding: 18px 22px 40px; }
+    .epl-overlay-top { display: flex; align-items: center; justify-content: space-between; min-height: 48px; }
+    .epl-menu-brand { display: flex; align-items: center; gap: 10px; }
+    .epl-menu-brand-crown { color: #FFD76A; font-size: 28px; }
+    .epl-menu-brand-name { color: #FFFFFF; font-size: 17px; font-weight: 800; line-height: 1.05; }
+    .epl-close { background: none; border: 0; color: #fff; font-size: 26px; cursor: pointer; }
+    #eplMenuOverlay button.menu-login {
+      margin: 18px 0 14px; border: 0; border-radius: 999px; padding: 10px 20px;
+      background: var(--epl-plum); color: #fff; font-weight: 700;
+    }
+    .epl-menu-link {
+      display: block; width: 100%; text-align: left; background: none; border: 0;
+      color: #fff; font-size: 20px; font-weight: 700; padding: 12px 0;
+    }
+    .epl-menu-link:active, .epl-menu-link:focus-visible { color: var(--epl-green); }
+    .epl-menu-divider { border: 0; border-top: 1px solid rgba(255,255,255,.25); margin: 16px 0; }
+    .epl-menu-muted { color: rgba(255,255,255,.62); font-size: 12px; font-weight: 700; }
+    @keyframes menuSlideIn { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: translateX(0); } }
+    .epl-submenu-enter { animation: menuSlideIn .24s ease-out both; }
+    #eplSearchOverlay { inset: 0 0 auto; padding: 12px; background: var(--epl-plum-dark); }
+    #eplSearchOverlay input { width: 100%; background: transparent; border: 0; outline: 0; color: #fff; font-size: 15px; }
+    #welcomeScreen {
+      position: fixed; inset: 0; z-index: 90; display: flex; align-items: center; justify-content: center;
+      padding: 24px; background: var(--epl-purple); color: #fff; overflow-y: auto;
+    }
+    #welcomeScreen.hidden { display: none; }
+    .welcome-content { width: min(100%, 520px); text-align: center; }
+    .welcome-crown { display: block; margin: 0 auto 12px; border: 0; background: transparent; color: #FFD76A; font-size: 58px; filter: drop-shadow(0 0 18px rgba(255,215,106,.55)); cursor: pointer; }
+    .welcome-content h1 { margin: 0 0 26px; color: #fff; font-size: 28px; line-height: 1.2; font-weight: 800; }
+    .welcome-jump { display: block; width: 100%; padding: 12px 0; background: none; border: 0; color: #fff; text-align: left; font-size: 16px; font-weight: 600; }
+    .welcome-carousel {
+      position: relative; margin-top: 28px; overflow: hidden; border-radius: 999px;
+      background: var(--epl-plum); touch-action: pan-y;
+    }
+    #welcomeCarouselTrack { display: flex; transition: transform .35s ease; }
+    #welcomeCarouselTrack button {
+      flex: 0 0 100%; min-height: 54px; border: 0; background: transparent; color: #fff;
+      font-size: 20px; font-weight: 700;
+    }
+    #welcomeCarouselTrack button.active { color: var(--epl-green); }
+    .carousel-dots { display: flex; justify-content: center; gap: 9px; margin-top: 12px; }
+    .carousel-dots button { width: 7px; height: 7px; padding: 0; border: 0; border-radius: 50%; background: #fff; opacity: .45; }
+    .carousel-dots button.active { background: var(--epl-pink); opacity: 1; }
+    .view-hidden { display: none !important; }
+    #rosterTableBody tr { border-color: rgba(255,255,255,.14) !important; }
+    #rosterTableBody tr:last-child { background: transparent !important; box-shadow: none !important; }
+    #rosterTableBody .paid-badge { color: var(--epl-green) !important; background: transparent !important; border: 0 !important; }
+    #league > .overflow-hidden { overflow-x: auto !important; }
+    #league > .overflow-hidden table { min-width: 640px; }
+    #funActivities [data-activity-item="bench"] table { min-width: 650px; }
+    #trashFeed, #suggestionFeed { max-height: none !important; }
+    .admin-edit-field { width: 100%; background: var(--epl-deep); border: 1px solid rgba(255,255,255,.2); color: #fff; padding: 8px; border-radius: 8px; }
+    @media (min-width: 700px) {
+      .welcome-content h1 { font-size: 34px; }
+      #eplMenuOverlay { padding-left: max(28px, calc((100vw - 600px)/2)); padding-right: max(28px, calc((100vw - 600px)/2)); }
+    }
+  </style>
 </head>
 <body id="bodyRoot" class="text-slate-100 min-h-screen font-sans selection:bg-purple-600 selection:text-white pb-20">
+
+  <div id="welcomeScreen" aria-label="Welcome to FPL Community">
+    <button class="epl-icon-button epl-welcome-menu-button" type="button" aria-label="Open menu" onclick="openCommunityMenu()">☰</button>
+    <div class="welcome-content" id="welcomeContent">
+      <button class="welcome-crown" data-save-key="epl-welcome-crown" type="button" aria-label="Open Secure Access" onclick="openAdminModal()">👑</button>
+      <h1 data-save-key="epl-welcome-title">Welcome to FPL Community</h1>
+      <button class="welcome-jump" data-save-key="epl-welcome-champions" type="button" onclick="openCommunityView('champions')">👑 Every gameweek brings a brand new champion.</button>
+      <button class="welcome-jump" data-save-key="epl-welcome-tables" type="button" onclick="openCommunityView('tables')">⚽ Check your points and climb the table.</button>
+      <button class="welcome-jump" data-save-key="epl-welcome-chats" type="button" onclick="openCommunityView('chats')">💬 Drop your banter and share ideas.</button>
+      <div class="welcome-carousel" id="welcomeCarousel">
+        <div id="welcomeCarouselTrack"></div>
+      </div>
+      <div class="carousel-dots" id="welcomeCarouselDots" aria-label="Welcome menu pages"></div>
+    </div>
+  </div>
+  <div id="eplMenuOverlay" class="epl-overlay" aria-label="Main menu"></div>
+  <div id="eplSearchOverlay" class="epl-overlay" aria-label="Search manager">
+    <div class="flex items-center gap-3">
+      <input id="managerSearchInput" type="search" placeholder="Search manager name..." aria-label="Search manager name">
+      <button class="epl-close" type="button" aria-label="Close search" onclick="closeManagerSearch()">✕</button>
+    </div>
+  </div>
 
   <header class="sticky top-0 z-40 bg-pitchDark/90 backdrop-blur-xl border-b border-cardBorder shadow-2xl">
     <div class="max-w-6xl mx-auto px-4 py-3 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
@@ -834,7 +1032,7 @@
     <section id="funActivities" class="glass-panel rounded-2xl p-5 sm:p-7 space-y-6">
       <div class="fun-activities-header rounded-xl border-b border-cardBorder p-3 pb-3">
         <h2 class="text-base sm:text-lg font-black uppercase tracking-wider text-cyan-300 flex items-center gap-3"><i class="fa-solid fa-trophy"></i> Fun Activities</h2>
-        <p class="mt-2 text-sm text-slate-300">Community tournament and squad features. Members can view standings and send requests; Admin manages the schedule and results.</p>
+        <p class="mt-2 text-sm text-slate-300">Community tournament and squad features. Members can view published standings; Super Admin manages entries and results.</p>
       </div>
       <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
         <article class="rounded-2xl border border-amber-400/40 bg-pitchDark/80 p-4 sm:p-5 space-y-5">
@@ -898,7 +1096,6 @@
           </div>
           <div class="rounded-xl border border-cyan-300/20 bg-cardDark p-3"><h4 class="text-xs font-black uppercase tracking-widest text-cyan-100">How Bench Swapping works</h4><ol class="mt-2 list-decimal space-y-2 pl-5 text-xs text-slate-300"><li>Send your manager name, the starting player, and the reason for the request.</li><li>The request fee is KSh 30; Admin confirms payment before approving a swap.</li><li>The replacement must be the highest-scoring eligible player on your substitutes bench.</li><li>The starting player must be injured or have a red card; zero points qualifies only when that starting player is your captain.</li><li>Admin checks the player status, points, captain status, and payment before confirming the outcome.</li></ol></div>
           <div class="rounded-xl border border-roseHot/30 bg-roseHot/10 p-3 text-xs text-rose-100"><b>Late contribution penalty:</b> Pay by the countdown deadline. A KSh 30 penalty applies to a contribution recorded after it. Admin checks payment time and marks the payment status.</div>
-          <div class="space-y-2"><label class="block text-xs font-bold text-slate-200">Manager name<input id="swapAuthor" type="text" placeholder="Your manager name" class="mt-1 w-full rounded-lg border border-cardBorder bg-cardDark p-2.5 text-xs text-white"></label><label class="block text-xs font-bold text-slate-200">Player and reason<textarea id="swapDetails" rows="3" placeholder="Bench player, starting player, and reason" class="mt-1 w-full rounded-lg border border-cardBorder bg-cardDark p-2.5 text-xs text-white"></textarea></label><button onclick="submitSwapRequest()" class="rounded-lg bg-cyan-400 px-4 py-2.5 text-xs font-black text-pitchDark">Send swap request</button></div>
           <div class="space-y-2"><h4 class="text-xs font-black uppercase tracking-widest text-cyan-200">Swap Requests</h4><div id="swapRequests" class="space-y-2"></div></div>
         </article>
       </div>
@@ -910,7 +1107,7 @@
         <div class="overflow-x-auto rounded-xl border border-violet-300/25">
           <table class="w-full min-w-[690px] text-left text-xs">
             <thead class="bg-violet-400/10 text-violet-100">
-              <tr><th class="p-3">Manager Name</th><th class="p-3">Savior Chosen</th><th class="p-3 text-right">GW Points</th><th class="p-3 text-right">Total Savior Points</th><th class="p-3">Payment Status</th></tr>
+              <tr><th class="p-3">Manager Name</th><th class="p-3">Savior Chosen</th><th class="p-3 text-right">GW Points</th><th class="p-3 text-right">Total Savior Points</th></tr>
             </thead>
             <tbody id="saviorTableBody" class="divide-y divide-cardBorder/60"></tbody>
           </table>
@@ -969,7 +1166,7 @@
       { id: '1', name: 'collins waweru', points: 892, gwPoints: 88, paid: true },
       { id: '2', name: 'bennedict kinuthia', points: 128, gwPoints: 65, paid: true },
       { id: '3', name: 'emmanuel muriithi', points: 115, gwPoints: 58, paid: false },
-      { id: '4', name: 'brian muchiiri', points: 110, gwPoints: 42, paid: true },
+      { id: '4', name: 'brian muchiiri', points: 110, gwPoints: 82, paid: true },
       { id: '5', name: 'mark maina', points: 85, gwPoints: 31, paid: false }
     ];
     let state = {
@@ -1054,7 +1251,6 @@
     async function saveStateToCloud(showNotification = false) {
       try {
         const saved = await saveSharedState();
-        if (saved && showNotification) showToast('Saved publicly!');
         return saved;
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
@@ -1313,19 +1509,16 @@
 
       sortedMembers.forEach((m, index) => {
         const rank = index + 1;
-        const isLeader = rank === 1;
-        const isBottom = rank === totalCount && totalCount > 1;
-
         let paidHTML = '';
         if (isAdminOrSuper) {
           paidHTML = `
-            <button onclick="togglePayment(this.dataset.memberId)" data-member-id="${escapeHTML(m.id)}" class="px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${m.paid ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/40' : 'bg-roseHot/20 text-roseHot border border-roseHot/40'}">
+            <button onclick="togglePayment(this.dataset.memberId)" data-member-id="${escapeHTML(m.id)}" class="paid-badge px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${m.paid ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/40' : 'bg-roseHot/20 text-roseHot border border-roseHot/40'}">
               ${m.paid ? 'Paid' : 'Pending'}
             </button>
           `;
         } else {
           paidHTML = m.paid
-            ? '<span class="text-cyan-300 bg-cyan-500/20 px-2.5 py-1 rounded-md border border-cyan-400/50 font-black text-xs shadow-sm">Paid</span>'
+            ? '<span class="paid-badge text-cyan-300 bg-cyan-500/20 px-2.5 py-1 rounded-md border border-cyan-400/50 font-black text-xs shadow-sm">Paid</span>'
             : '<span class="text-roseHot bg-roseHot/20 px-2.5 py-1 rounded-md border border-roseHot/50 font-black text-xs shadow-sm">Pending</span>';
         }
 
@@ -1344,30 +1537,22 @@
             <input type="number" value="${Number(m.points) || 0}" data-member-id="${escapeHTML(m.id)}" onchange="updateMemberTotalPoints(this.dataset.memberId, this.value)" class="bg-pitchDark border border-cardBorder text-xs text-electricCyan p-1 rounded focus:outline-none text-right w-16 font-bold">
           `;
         } else {
-          nameDisplayHTML = `<span class="font-bold text-white editable-node">${escapeHTML(m.name)}</span>`;
-          gwPointsHTML = `<span class="font-semibold text-skyBright editable-node">${Number(m.gwPoints !== undefined ? m.gwPoints : 0).toLocaleString()}</span>`;
-          totalPointsHTML = `<span class="font-bold text-electricCyan editable-node">${Number(m.points || 0).toLocaleString()}</span>`;
+          nameDisplayHTML = `<span class="font-bold text-white editable-node" data-member-name-id="${escapeHTML(m.id)}">${escapeHTML(m.name)}</span>`;
+          gwPointsHTML = `<span class="font-semibold text-skyBright editable-node" data-member-gw-id="${escapeHTML(m.id)}">${Number(m.gwPoints !== undefined ? m.gwPoints : 0).toLocaleString()}</span>`;
+          totalPointsHTML = `<span class="font-bold text-electricCyan editable-node" data-member-total-id="${escapeHTML(m.id)}">${Number(m.points || 0).toLocaleString()}</span>`;
         }
 
         const row = document.createElement('tr');
 
-        if (isBottom) {
-          row.className = "animate-burn-glow border-b border-roseHot/60 transition-colors";
-        } else {
-          row.className = "hover:bg-cardDark/60 transition-colors border-b border-cardBorder/50";
-        }
+        row.className = "transition-colors border-b border-cardBorder/50";
 
         row.innerHTML = `
           <td class="py-3.5 px-4 font-bold">
-            <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg ${isLeader ? 'bg-amber-400/30 text-amber-300 border border-amber-400/60 font-black' : isBottom ? 'bg-roseHot/30 text-rose-200 border border-roseHot/60 font-black' : 'bg-pitchDark text-slate-200 border border-cardBorder'}">
-              ${isLeader ? '👑' : rank}
-            </span>
+            <span>${rank}</span>
           </td>
           <td class="py-3.5 px-4">
             <div class="flex items-center gap-2">
               ${nameDisplayHTML}
-              ${isLeader ? '' : ''}
-              ${isBottom ? '' : ''}
             </div>
           </td>
           <td class="py-3.5 px-4 text-center">${paidHTML}</td>
@@ -2302,6 +2487,951 @@
 
     synchronizeRuntimeConfiguration();
 
+  </script>
+  <script>
+    const communityViews = [
+      { id: 'all', label: 'All' },
+      { id: 'tables', label: 'Tables' },
+      { id: 'champions', label: 'Champions' },
+      { id: 'payments', label: 'Payments & Proof' },
+      { id: 'activities', label: 'Fun Activities' },
+      { id: 'chats', label: 'Chats' },
+      { id: 'announcements', label: 'Announcements' }
+    ];
+    let activeCommunityView = 'all';
+    let carouselIndex = 0;
+    let carouselSelectionTimer = null;
+    let editingSwapIndex = -1;
+    let editingSaviorIndex = -1;
+
+    function openCommunityView(view) {
+      activeCommunityView = view;
+      document.body.classList.remove('welcome-mode');
+      document.getElementById('welcomeScreen').classList.add('hidden');
+      document.getElementById('eplMenuOverlay').classList.remove('open');
+      applyCommunityView();
+    }
+
+    function applyCommunityView() {
+      const all = activeCommunityView === 'all';
+      document.querySelectorAll('[data-view-section]').forEach(element => {
+        const category = element.dataset.viewSection;
+        const visible = all || category === activeCommunityView ||
+          (activeCommunityView === 'payments' && category === 'payments');
+        element.classList.toggle('view-hidden', !visible);
+      });
+
+      const activities = document.getElementById('funActivities');
+      if (activities) {
+        const onActivities = all || ['activities', 'tournament', 'bench', 'savior'].includes(activeCommunityView);
+        activities.classList.toggle('view-hidden', !onActivities);
+        activities.querySelectorAll('[data-activity-item]').forEach(item => {
+          const itemView = item.dataset.activityItem;
+          const visible = all || activeCommunityView === 'activities' ||
+            activeCommunityView === itemView;
+          item.classList.toggle('view-hidden', !visible);
+        });
+        const activityHeader = activities.querySelector('.fun-activities-header');
+        if (activityHeader) activityHeader.classList.toggle('hidden', ['tournament', 'bench', 'savior'].includes(activeCommunityView));
+      }
+
+      const main = document.querySelector('main');
+      if (main) {
+        [...main.children].forEach(child => {
+          if (child.hasAttribute('data-view-section')) return;
+          const sections = [...child.querySelectorAll('[data-view-section]')];
+          if (sections.length) child.classList.toggle('view-hidden', !all && !sections.some(section => !section.classList.contains('view-hidden')));
+        });
+      }
+      document.querySelectorAll('#eplBottomNav button').forEach(button => {
+        button.classList.toggle('active', button.dataset.view === activeCommunityView ||
+          (button.dataset.view === 'activities' && ['tournament', 'bench', 'savior'].includes(activeCommunityView)));
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openCommunityMenu() {
+      const menu = document.getElementById('eplMenuOverlay');
+      const links = communityViews.map(view => {
+        const label = `<span class="community-view-label editable-node" data-community-label="${view.id}" data-save-key="community-view-label-${view.id}">${escapeHTML(view.label)}</span>`;
+        if (view.id === 'activities') {
+          return `<button class="epl-menu-link" type="button" onclick="openActivitiesSubmenu()">${label} ›</button>`;
+        }
+        return `<button class="epl-menu-link" type="button" onclick="openCommunityView('${view.id}')">${label}</button>`;
+      }).join('');
+      menu.innerHTML = `
+        <div class="epl-overlay-top">
+          <div class="epl-menu-brand">
+            <span class="epl-menu-brand-crown editable-node" data-save-key="epl-menu-crown">👑</span>
+            <strong class="epl-menu-brand-name editable-node" data-save-key="epl-menu-brand">FPL<br>Community</strong>
+          </div>
+          <button type="button" class="epl-close" aria-label="Close menu" onclick="closeCommunityMenu()">✕</button>
+        </div>
+        <button type="button" class="menu-login editable-node" data-save-key="epl-menu-login" onclick="closeCommunityMenu();openAdminModal()">Member Login</button>
+        <div id="communityMenuMain">
+          ${links}
+          <hr class="epl-menu-divider">
+          <div class="epl-menu-muted editable-node">More From FPL Community</div>
+          <button class="epl-menu-link editable-node" type="button" onclick="openCommunityView('rules')">Rules &amp; Guidelines</button>
+          <button class="epl-menu-link editable-node" type="button" onclick="openCommunityView('chats')">Suggestions</button>
+          <button class="epl-menu-link editable-node" type="button" onclick="openCommunityView('payments')">Za Githeri Support</button>
+        </div>`;
+      menu.classList.add('open');
+      renderCustomContent('menu');
+      assignNewEditableKeys(menu, 'epl-menu');
+      if (typeof tagEditableNodes === 'function') tagEditableNodes();
+      applySavedTextChanges();
+      installTextDeleteControls();
+      renderCommunityTextTargets();
+      if (state.accessMode === 'superadmin') setInlineEditable(true);
+    }
+
+    function openActivitiesSubmenu() {
+      const menu = document.getElementById('eplMenuOverlay');
+      const main = document.getElementById('communityMenuMain');
+      if (!main) return;
+      main.innerHTML = `
+        <button class="epl-menu-link editable-node" type="button" onclick="openCommunityMenu()">← Back</button>
+        <div class="epl-menu-muted editable-node">Fun Activities</div>
+        <button class="epl-menu-link editable-node" type="button" onclick="openCommunityView('tournament')">Manager Tournament</button>
+        <button class="epl-menu-link editable-node" type="button" onclick="openCommunityView('bench')">Bench Swapping</button>
+        <button class="epl-menu-link editable-node" type="button" onclick="openCommunityView('savior')">The Savior</button>`;
+      main.classList.remove('epl-submenu-enter');
+      void main.offsetWidth;
+      main.classList.add('epl-submenu-enter');
+      assignNewEditableKeys(main, 'epl-submenu');
+      if (typeof tagEditableNodes === 'function') tagEditableNodes();
+      applySavedTextChanges();
+      installTextDeleteControls();
+      renderCommunityTextTargets();
+      if (state.accessMode === 'superadmin') setInlineEditable(true);
+      menu.scrollTop = 0;
+    }
+
+    function closeCommunityMenu() {
+      document.getElementById('eplMenuOverlay').classList.remove('open');
+    }
+
+    function openManagerSearch() {
+      const overlay = document.getElementById('eplSearchOverlay');
+      overlay.classList.add('open');
+      document.getElementById('managerSearchInput').focus();
+    }
+
+    function closeManagerSearch() {
+      document.getElementById('eplSearchOverlay').classList.remove('open');
+      const input = document.getElementById('managerSearchInput');
+      input.value = '';
+      filterManagerRows('');
+    }
+
+    function filterManagerRows(query) {
+      const term = query.trim().toLocaleLowerCase();
+      if (term) openCommunityView('tables');
+      document.querySelectorAll('#rosterTableBody tr').forEach(row => {
+        const matched = !term || row.textContent.toLocaleLowerCase().includes(term);
+        row.hidden = !matched;
+        row.classList.toggle('manager-search-match', Boolean(term && matched));
+      });
+    }
+
+    function buildCommunityHeader() {
+      const header = document.querySelector('header');
+      const crown = document.getElementById('crownMark');
+      const modeIcon = document.getElementById('modeIcon');
+      const modeSelect = document.getElementById('accessModeSelect');
+      if (!header || !crown) return;
+      const row = document.createElement('div');
+      row.className = 'epl-header-row';
+      row.innerHTML = `
+        <button type="button" class="epl-icon-button" aria-label="Open menu" onclick="openCommunityMenu()">☰</button>
+        <div class="epl-header-title" id="eplHeaderTitle">
+          <div class="epl-brand-text"><h1><span class="editable-node" data-save-key="epl-header-brand">FPL Community</span><small class="editable-node" data-save-key="epl-header-subtitle">Official Sweepstake Hub</small></h1></div>
+        </div>
+        <button type="button" class="epl-icon-button" aria-label="Search managers" onclick="openManagerSearch()"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
+        <button type="button" class="epl-welcome-button" onclick="showWelcomeScreen()">← Welcome</button>`;
+      row.querySelector('#eplHeaderTitle').prepend(crown);
+      header.replaceChildren(row);
+      if (modeIcon && modeSelect) {
+        const access = document.createElement('div');
+        access.className = 'hidden';
+        access.append(modeIcon, modeSelect);
+        row.append(access);
+      }
+      crown.classList.add('editable-node');
+      crown.setAttribute('aria-label', 'Open Secure Access');
+    }
+
+    function showWelcomeScreen() {
+      document.body.classList.add('welcome-mode');
+      document.getElementById('welcomeScreen').classList.remove('hidden');
+    }
+
+    function buildCarousel() {
+      const track = document.getElementById('welcomeCarouselTrack');
+      const dots = document.getElementById('welcomeCarouselDots');
+      track.innerHTML = communityViews.map((view, index) =>
+        `<button type="button" class="community-view-label editable-node" data-community-label="${view.id}" data-save-key="community-view-label-${view.id}" data-carousel-index="${index}" onclick="selectCarouselView(${index})">${escapeHTML(view.label)}</button>`
+      ).join('');
+      dots.innerHTML = communityViews.map((view, index) =>
+        `<button type="button" aria-label="${escapeHTML(view.label)}" data-carousel-dot="${index}" onclick="selectCarouselView(${index})"></button>`
+      ).join('');
+      updateCarousel();
+      window.setInterval(() => {
+        if (!document.getElementById('welcomeScreen').classList.contains('hidden')) {
+          carouselIndex = (carouselIndex + 1) % communityViews.length;
+          updateCarousel();
+        }
+      }, 3000);
+      let touchStartX = 0;
+      const carousel = document.getElementById('welcomeCarousel');
+      carousel.addEventListener('touchstart', event => { touchStartX = event.changedTouches[0].clientX; }, { passive: true });
+      carousel.addEventListener('touchend', event => {
+        const delta = event.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(delta) > 40) {
+          carouselIndex = (carouselIndex + (delta < 0 ? 1 : communityViews.length - 1)) % communityViews.length;
+          updateCarousel();
+        }
+      }, { passive: true });
+      carousel.addEventListener('pointerdown', event => { touchStartX = event.clientX; }, { passive: true });
+      carousel.addEventListener('pointerup', event => {
+        const delta = event.clientX - touchStartX;
+        if (event.pointerType !== 'touch' && Math.abs(delta) > 40) {
+          carouselIndex = (carouselIndex + (delta < 0 ? 1 : communityViews.length - 1)) % communityViews.length;
+          updateCarousel();
+        }
+      }, { passive: true });
+    }
+
+    function updateCarousel() {
+      const track = document.getElementById('welcomeCarouselTrack');
+      track.style.transform = `translateX(-${carouselIndex * 100}%)`;
+      track.querySelectorAll('[data-carousel-index]').forEach((button, index) => button.classList.toggle('active', index === carouselIndex));
+      document.querySelectorAll('[data-carousel-dot]').forEach((dot, index) => dot.classList.toggle('active', index === carouselIndex));
+    }
+
+    function selectCarouselView(index) {
+      if (!Number.isInteger(index) || index < 0 || index >= communityViews.length) return;
+      carouselIndex = index;
+      updateCarousel();
+      const selected = document.querySelector(`#welcomeCarouselTrack [data-carousel-index="${index}"]`);
+      if (selected) {
+        selected.classList.remove('tapped');
+        void selected.offsetWidth;
+        selected.classList.add('tapped');
+      }
+      window.clearTimeout(carouselSelectionTimer);
+      carouselSelectionTimer = window.setTimeout(() => openCommunityView(communityViews[index].id), 300);
+    }
+
+    function buildBottomNavigation() {
+      const nav = document.createElement('nav');
+      nav.id = 'eplBottomNav';
+      nav.setAttribute('aria-label', 'Bottom navigation');
+      const tabs = [
+        { view: communityViews.find(item => item.id === 'all'), label: 'All' },
+        { view: communityViews.find(item => item.id === 'tables'), label: 'Tables' },
+        { view: communityViews.find(item => item.id === 'payments'), label: 'Payments' },
+        { view: communityViews.find(item => item.id === 'activities'), label: 'Activities' },
+        { view: communityViews.find(item => item.id === 'chats'), label: 'Chats' }
+      ];
+      nav.innerHTML = `<div class="bottom-nav-grid">${tabs.map(({ view, label }) => {
+        const sharedLabel = ['all', 'tables'].includes(view.id);
+        const key = sharedLabel ? `community-view-label-${view.id}` : `epl-bottom-${view.id}`;
+        const labelClass = sharedLabel ? 'community-view-label' : '';
+        const labelId = sharedLabel ? `data-community-label="${view.id}"` : '';
+        return `<button type="button" class="editable-node ${labelClass}" data-save-key="${key}" ${labelId} data-view="${view.id}" onclick="openCommunityView('${view.id}')">${escapeHTML(sharedLabel ? view.label : label)}</button>`;
+      }).join('')}</div>`;
+      document.body.append(nav);
+    }
+
+    function classifyCommunitySections() {
+      document.querySelectorAll('main section').forEach(section => {
+        let view = '';
+        if (section.id === 'homeTop') view = 'home';
+        else if (section.id === 'league') view = 'tables';
+        else if (section.id === 'payments' || section.id === 'transparencyProof') view = 'payments';
+        else if (section.id === 'community' || section.querySelector('#trashFeed')) view = 'chats';
+        else {
+          const heading = section.querySelector('h2')?.textContent.toLocaleLowerCase() || '';
+          if (heading.includes('winner spotlight')) view = 'champions';
+          else if (heading.includes('announcement')) view = 'announcements';
+          else if (heading.includes('rules')) view = 'rules';
+          else if (heading.includes('suggestions')) view = 'chats';
+        }
+        if (view) section.dataset.viewSection = view;
+      });
+      const activities = document.getElementById('funActivities');
+      if (activities) {
+        const inner = activities.querySelector(':scope > .grid');
+        const articles = inner ? [...inner.querySelectorAll(':scope > article')] : [];
+        if (articles[0]) articles[0].dataset.activityItem = 'tournament';
+        if (articles[1]) articles[1].dataset.activityItem = 'bench';
+        const savior = activities.querySelector(':scope > article');
+        if (savior) savior.dataset.activityItem = 'savior';
+      }
+    }
+
+    function buildActivityControls() {
+      const activity = document.getElementById('funActivities');
+      if (!activity) return;
+      const benchArticle = activity.querySelector('[data-activity-item="bench"]');
+      const saviorArticle = activity.querySelector('[data-activity-item="savior"]');
+      if (benchArticle) {
+        const inputArea = benchArticle.querySelector('#swapAuthor')?.closest('.space-y-2');
+        if (inputArea) inputArea.remove();
+        const oldHost = benchArticle.querySelector('#swapRequests');
+        if (oldHost) {
+          const wrapper = oldHost.parentElement;
+          wrapper.innerHTML = `
+            <h4 class="text-xs font-black uppercase tracking-widest text-white editable-node">Bench Swap Activity</h4>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left">
+                <thead><tr><th>Manager Name</th><th>Subbed Out</th><th>Subbed In</th><th>Reason</th><th class="text-right">Points Added</th><th class="superadmin-only hidden">Admin Controls</th></tr></thead>
+                <tbody id="benchSwapTableBody"></tbody>
+              </table>
+            </div>
+            <form id="benchSwapForm" class="superadmin-only hidden grid grid-cols-1 gap-2 sm:grid-cols-2" onsubmit="saveBenchSwap(event)">
+              <input class="admin-edit-field" name="manager" placeholder="Manager Name" required>
+              <input class="admin-edit-field" name="subbedOut" placeholder="Subbed Out" required>
+              <input class="admin-edit-field" name="subbedIn" placeholder="Subbed In" required>
+              <input class="admin-edit-field" name="reason" placeholder="Reason" required>
+              <input class="admin-edit-field" name="pointsAdded" type="number" placeholder="Points Added" required>
+              <button class="epl-btn-primary rounded-lg px-4 py-2 font-bold" type="submit">Add Swap</button>
+              <button class="hidden rounded-lg bg-white/10 px-4 py-2 font-bold text-white" id="cancelBenchEdit" type="button" onclick="cancelBenchEdit()">Cancel Edit</button>
+            </form>`;
+        }
+      }
+      if (saviorArticle) {
+        const oldHead = saviorArticle.querySelector('thead tr');
+        if (oldHead) oldHead.innerHTML = '<th class="p-3">Manager Name</th><th class="p-3">Savior Chosen</th><th class="p-3 text-right">GW Points</th><th class="p-3 text-right">Total Savior Points</th><th class="superadmin-only hidden">Admin Controls</th>';
+        const oldAdmin = saviorArticle.querySelector('#saviorInput')?.closest('.admin-only');
+        if (oldAdmin) {
+          oldAdmin.className = 'superadmin-only hidden grid grid-cols-1 gap-2 rounded-xl bg-cardDark p-4 sm:grid-cols-2';
+          oldAdmin.innerHTML = `
+            <input class="admin-edit-field" id="saviorManagerInput" placeholder="Manager Name" required>
+            <input class="admin-edit-field" id="saviorChosenInput" placeholder="Savior Chosen" required>
+            <input class="admin-edit-field" id="saviorGwPointsInput" type="number" placeholder="GW Points" required>
+            <input class="admin-edit-field" id="saviorTotalPointsInput" type="number" placeholder="Total Savior Points" required>
+            <button type="button" class="epl-btn-primary rounded-lg px-4 py-2 font-bold" onclick="saveSaviorEntry()">Add Savior Entry</button>
+            <button type="button" class="hidden rounded-lg bg-white/10 px-4 py-2 font-bold text-white" id="cancelSaviorEdit" onclick="cancelSaviorEdit()">Cancel Edit</button>`;
+        }
+      }
+      renderActivities();
+    }
+
+    function renderBenchSwapTable() {
+      const body = document.getElementById('benchSwapTableBody');
+      if (!body) return;
+      const rows = Array.isArray(state.benchSwapEntries) ? state.benchSwapEntries : [];
+      const admin = state.accessMode === 'superadmin';
+      body.innerHTML = rows.length ? rows.map((row, index) => `<tr class="border-t border-white/10">
+        <td class="p-3">${escapeHTML(row.manager || '')}</td><td class="p-3">${escapeHTML(row.subbedOut || '')}</td>
+        <td class="p-3">${escapeHTML(row.subbedIn || '')}</td><td class="p-3">${escapeHTML(row.reason || '')}</td>
+        <td class="p-3 text-right font-bold">${Number(row.pointsAdded || 0)}</td>
+        ${admin ? `<td class="p-3 whitespace-nowrap"><button class="mr-3 font-bold text-cyan-200" onclick="editBenchSwap(${index})">Edit</button><button class="font-bold text-rose-300" onclick="deleteBenchSwap(${index})">Delete</button></td>` : ''}
+      </tr>`).join('') : `<tr><td class="p-3 text-white" colspan="${admin ? 6 : 5}">No bench swaps posted yet.</td></tr>`;
+      const form = document.getElementById('benchSwapForm');
+      const cancel = document.getElementById('cancelBenchEdit');
+      if (form) form.classList.toggle('hidden', !admin);
+      if (cancel) cancel.classList.toggle('hidden', !admin || editingSwapIndex < 0);
+      document.querySelectorAll('#funActivities [data-activity-item="bench"] th.superadmin-only').forEach(element => element.classList.toggle('hidden', !admin));
+    }
+
+    function renderSaviorTable() {
+      const body = document.getElementById('saviorTableBody');
+      if (!body) return;
+      const rows = Array.isArray(state.saviorEntries) ? state.saviorEntries : [];
+      const admin = state.accessMode === 'superadmin';
+      body.innerHTML = rows.length ? rows.map((row, index) => `<tr class="border-t border-white/10">
+        <td class="p-3">${escapeHTML(row.name || '')}</td><td class="p-3">${escapeHTML(row.savior || '')}</td>
+        <td class="p-3 text-right font-bold">${Number(row.gw_pts || 0)}</td><td class="p-3 text-right font-bold">${Number(row.total_pts || 0)}</td>
+        ${admin ? `<td class="p-3 whitespace-nowrap"><button class="mr-3 font-bold text-cyan-200" onclick="editSaviorEntry(${index})">Edit</button><button class="font-bold text-rose-300" onclick="deleteSaviorEntry(${index})">Delete</button></td>` : ''}
+      </tr>`).join('') : `<tr><td class="p-4 text-center text-white" colspan="${admin ? 5 : 4}">No Savior entries yet.</td></tr>`;
+      const adminForm = document.querySelector('#funActivities [data-activity-item="savior"] div.superadmin-only');
+      if (adminForm) adminForm.classList.toggle('hidden', !admin);
+      document.querySelectorAll('#funActivities [data-activity-item="savior"] th.superadmin-only').forEach(element => element.classList.toggle('hidden', !admin));
+      if (adminForm && editingSaviorIndex < 0) {
+        const button = adminForm.querySelector('button[onclick^="saveSaviorEntry"]');
+        if (button) button.textContent = 'Add Savior Entry';
+      }
+    }
+
+    function renderActivities() {
+      if (typeof renderTournamentTables === 'function') renderTournamentTables();
+      renderBenchSwapTable();
+      renderSaviorTable();
+    }
+
+    async function persistActivityChanges() {
+      if (typeof saveStateToCloud === 'function') await saveStateToCloud(false);
+      renderActivities();
+    }
+
+    async function saveBenchSwap(event) {
+      event.preventDefault();
+      if (state.accessMode !== 'superadmin') return;
+      const form = event.currentTarget;
+      const data = new FormData(form);
+      const row = {
+        manager: String(data.get('manager') || '').trim(),
+        subbedOut: String(data.get('subbedOut') || '').trim(),
+        subbedIn: String(data.get('subbedIn') || '').trim(),
+        reason: String(data.get('reason') || '').trim(),
+        pointsAdded: Number(data.get('pointsAdded')) || 0
+      };
+      state.benchSwapEntries = Array.isArray(state.benchSwapEntries) ? state.benchSwapEntries : [];
+      if (editingSwapIndex >= 0) state.benchSwapEntries[editingSwapIndex] = row;
+      else state.benchSwapEntries.push(row);
+      cancelBenchEdit();
+      await persistActivityChanges();
+    }
+
+    function editBenchSwap(index) {
+      if (state.accessMode !== 'superadmin') return;
+      const row = state.benchSwapEntries[index];
+      const form = document.getElementById('benchSwapForm');
+      if (!row || !form) return;
+      editingSwapIndex = index;
+      Object.keys(row).forEach(key => { if (form.elements[key]) form.elements[key].value = row[key]; });
+      form.querySelector('[type="submit"]').textContent = 'Save Swap';
+      document.getElementById('cancelBenchEdit').classList.remove('hidden');
+      form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function cancelBenchEdit() {
+      editingSwapIndex = -1;
+      const form = document.getElementById('benchSwapForm');
+      if (form) { form.reset(); form.querySelector('[type="submit"]').textContent = 'Add Swap'; }
+      const cancel = document.getElementById('cancelBenchEdit');
+      if (cancel) cancel.classList.add('hidden');
+    }
+
+    async function deleteBenchSwap(index) {
+      if (state.accessMode !== 'superadmin') return;
+      state.benchSwapEntries.splice(index, 1);
+      await persistActivityChanges();
+    }
+
+    async function saveSaviorEntry() {
+      if (state.accessMode !== 'superadmin') return;
+      const row = {
+        name: document.getElementById('saviorManagerInput').value.trim(),
+        savior: document.getElementById('saviorChosenInput').value.trim(),
+        gw_pts: Number(document.getElementById('saviorGwPointsInput').value) || 0,
+        total_pts: Number(document.getElementById('saviorTotalPointsInput').value) || 0
+      };
+      if (!row.name || !row.savior) return;
+      state.saviorEntries = Array.isArray(state.saviorEntries) ? state.saviorEntries : [];
+      if (editingSaviorIndex >= 0) state.saviorEntries[editingSaviorIndex] = row;
+      else state.saviorEntries.push(row);
+      cancelSaviorEdit();
+      await persistActivityChanges();
+    }
+
+    function editSaviorEntry(index) {
+      if (state.accessMode !== 'superadmin') return;
+      const row = state.saviorEntries[index];
+      if (!row) return;
+      editingSaviorIndex = index;
+      document.getElementById('saviorManagerInput').value = row.name || '';
+      document.getElementById('saviorChosenInput').value = row.savior || '';
+      document.getElementById('saviorGwPointsInput').value = row.gw_pts || 0;
+      document.getElementById('saviorTotalPointsInput').value = row.total_pts || 0;
+      const form = document.querySelector('#funActivities [data-activity-item="savior"] div.superadmin-only');
+      form.querySelector('button[onclick^="saveSaviorEntry"]').textContent = 'Save Savior Entry';
+      document.getElementById('cancelSaviorEdit').classList.remove('hidden');
+      form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function cancelSaviorEdit() {
+      editingSaviorIndex = -1;
+      ['saviorManagerInput', 'saviorChosenInput', 'saviorGwPointsInput', 'saviorTotalPointsInput'].forEach(id => {
+        const input = document.getElementById(id);
+        if (input) input.value = '';
+      });
+      const cancel = document.getElementById('cancelSaviorEdit');
+      if (cancel) cancel.classList.add('hidden');
+      const button = document.querySelector('#funActivities [data-activity-item="savior"] div.superadmin-only button[onclick^="saveSaviorEntry"]');
+      if (button) button.textContent = 'Add Savior Entry';
+    }
+
+    async function deleteSaviorEntry(index) {
+      if (state.accessMode !== 'superadmin') return;
+      state.saviorEntries.splice(index, 1);
+      await persistActivityChanges();
+    }
+
+    function renderCommunityFeed(feedId, items, type) {
+      const feed = document.getElementById(feedId);
+      if (!feed) return;
+      const admin = state.accessMode === 'superadmin';
+      if (!items.length) {
+        feed.innerHTML = `<p class="py-2 text-sm text-white">No ${type === 'banter' ? 'banter' : 'suggestions'} posted yet.</p>`;
+        return;
+      }
+      const currentAuthor = sessionStorage.getItem('fpl_manager_identity') || '';
+      feed.innerHTML = items.map(item => {
+        const authored = currentAuthor === String(item.author || '');
+        const canDelete = admin || authored;
+        return `<article class="flex items-start justify-between gap-3 border-b border-white/15 py-3 text-sm">
+          <div class="min-w-0 flex-1">
+            <strong class="editable-node" ${admin ? `contenteditable="true" data-post-kind="${type}" data-post-field="author" data-post-id="${escapeHTML(item.id)}"` : ''}>${escapeHTML(item.author || '')}</strong>
+            <p class="editable-node mt-1 whitespace-pre-wrap text-white" ${admin ? `contenteditable="true" data-post-kind="${type}" data-post-field="text" data-post-id="${escapeHTML(item.id)}"` : ''}>${escapeHTML(item.text || '')}</p>
+          </div>
+          <div class="flex shrink-0 gap-3">
+            ${canDelete ? `<button type="button" class="font-bold text-rose-300" data-post-kind="${type}" data-post-id="${escapeHTML(item.id)}" onclick="deleteCommunityPost(this.dataset.postKind,this.dataset.postId)">Unsend</button>` : ''}
+          </div>
+        </article>`;
+      }).join('');
+    }
+
+    function renderTrashTalk() { renderCommunityFeed('trashFeed', Array.isArray(state.trashTalks) ? state.trashTalks : [], 'banter'); }
+    function renderSuggestions() { renderCommunityFeed('suggestionFeed', Array.isArray(state.suggestions) ? state.suggestions : [], 'suggestion'); }
+
+    async function submitTrashTalk() {
+      const authorInput = document.getElementById('trashAuthorInput');
+      const textInput = document.getElementById('trashTextInput');
+      const author = authorInput.value.trim();
+      const text = textInput.value.trim();
+      if (!author || !text) return;
+      sessionStorage.setItem('fpl_manager_identity', author);
+      state.trashTalks = Array.isArray(state.trashTalks) ? state.trashTalks : [];
+      state.trashTalks.push({ id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, author, text });
+      textInput.value = '';
+      authorInput.value = '';
+      renderTrashTalk();
+      await persistActivityChanges();
+    }
+
+    async function submitSuggestion() {
+      const authorInput = document.getElementById('sugAuthorInput');
+      const textInput = document.getElementById('sugTextInput');
+      const author = authorInput.value.trim();
+      const text = textInput.value.trim();
+      if (!author || !text) return;
+      sessionStorage.setItem('fpl_manager_identity', author);
+      state.suggestions = Array.isArray(state.suggestions) ? state.suggestions : [];
+      state.suggestions.push({ id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, author, text });
+      textInput.value = '';
+      authorInput.value = '';
+      renderSuggestions();
+      await persistActivityChanges();
+    }
+
+    async function deleteCommunityPost(type, id) {
+      const key = type === 'banter' ? 'trashTalks' : 'suggestions';
+      const items = Array.isArray(state[key]) ? state[key] : [];
+      const item = items.find(post => String(post.id) === String(id));
+      const isAdmin = state.accessMode === 'superadmin';
+      const isAuthor = (sessionStorage.getItem('fpl_manager_identity') || '') === String(item?.author || '');
+      if (!item || (!isAdmin && !isAuthor)) return;
+      state[key] = items.filter(post => String(post.id) !== String(id));
+      if (type === 'banter') renderTrashTalk(); else renderSuggestions();
+      await persistActivityChanges();
+    }
+
+    function buildSuperAdminTextManager() {
+      if (document.getElementById('superAdminTextManager')) return;
+      const manager = document.createElement('details');
+      manager.id = 'superAdminTextManager';
+      manager.className = 'superadmin-only hidden fixed bottom-16 left-2 right-2 z-50 max-h-[45vh] overflow-auto rounded-xl bg-[#3D0042] p-3 text-white shadow-2xl';
+      manager.innerHTML = `
+        <summary class="cursor-pointer text-sm font-extrabold">Universal content editor</summary>
+        <div class="mt-3 grid gap-2 sm:grid-cols-2">
+          <label class="text-xs font-bold">Existing text
+            <select id="communityTextTarget" class="mt-1 w-full rounded-lg bg-[#18001B] p-2 text-white"></select>
+          </label>
+          <div class="flex items-end gap-2">
+            <button type="button" class="rounded-lg bg-white/10 px-3 py-2 text-xs font-bold" onclick="focusCommunityText()">Edit selected</button>
+            <button type="button" class="rounded-lg bg-[#FF2882] px-3 py-2 text-xs font-bold text-white" onclick="deleteCommunityText()">Delete selected</button>
+          </div>
+          <label class="text-xs font-bold">Add text to
+            <select id="communityTextLocation" class="mt-1 w-full rounded-lg bg-[#18001B] p-2 text-white">
+              <option value="welcome">Welcome screen</option><option value="menu">Main menu</option>
+              <option value="tables">Tables</option><option value="champions">Champions</option>
+              <option value="payments">Payments &amp; Proof</option><option value="activities">Fun Activities</option>
+              <option value="chats">Chats &amp; Suggestions</option><option value="announcements">Announcements</option>
+              <option value="rules">Rules &amp; Guidelines</option>
+            </select>
+          </label>
+          <label class="text-xs font-bold">Link opens
+            <select id="communityTextRoute" class="mt-1 w-full rounded-lg bg-[#18001B] p-2 text-white">
+              <option value="tables">Tables</option><option value="champions">Champions</option>
+              <option value="payments">Payments &amp; Proof</option><option value="activities">Fun Activities</option>
+              <option value="chats">Chats</option><option value="announcements">Announcements</option>
+            </select>
+          </label>
+          <label class="text-xs font-bold sm:col-span-2">New text
+            <input id="communityTextInput" class="mt-1 w-full rounded-lg bg-[#18001B] p-2 text-white" placeholder="Type text to add">
+          </label>
+          <button type="button" class="epl-btn-primary rounded-lg px-4 py-2 text-xs font-extrabold sm:col-span-2" onclick="addCommunityText()">Add text</button>
+        </div>`;
+      document.body.append(manager);
+      renderCommunityTextTargets();
+    }
+
+    function renderCommunityTextTargets() {
+      const select = document.getElementById('communityTextTarget');
+      if (!select) return;
+      const prior = select.value;
+      const nodes = [...document.querySelectorAll('.editable-node[data-save-key]')]
+        .filter(node => node.isConnected && !node.closest('#superAdminTextManager'));
+      select.innerHTML = `<option value="">Select text to edit or delete</option>` + nodes.map(node => {
+        const key = node.dataset.saveKey;
+        const label = `${node.tagName.toLowerCase()}: ${node.textContent.trim().replace(/\s+/g, ' ').slice(0, 70) || '(empty)'}`;
+        return `<option value="${escapeHTML(key)}">${escapeHTML(label)}</option>`;
+      }).join('');
+      if ([...select.options].some(option => option.value === prior)) select.value = prior;
+    }
+
+    function focusCommunityText() {
+      const key = document.getElementById('communityTextTarget')?.value;
+      const node = [...document.querySelectorAll('.editable-node[data-save-key]')].find(item => item.dataset.saveKey === key);
+      if (!node) return;
+      node.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      node.focus();
+    }
+
+    async function deleteCommunityText() {
+      if (state.accessMode !== 'superadmin') return;
+      const key = document.getElementById('communityTextTarget')?.value;
+      if (!key) return;
+      state.customTexts = state.customTexts || {};
+      const target = [...document.querySelectorAll('.editable-node[data-save-key]')].find(node => node.dataset.saveKey === key);
+      if (target?.dataset.customContentId) {
+        state.customContent = (state.customContent || []).filter(item => item.id !== target.dataset.customContentId);
+        delete state.customTexts[key];
+        renderCustomContent();
+      } else {
+        state.customTexts[key] = '__deleted__';
+        applySavedTextChanges();
+      }
+      renderCommunityTextTargets();
+      await saveStateToCloud(false);
+    }
+
+    async function addCommunityText() {
+      if (state.accessMode !== 'superadmin') return;
+      const input = document.getElementById('communityTextInput');
+      const text = input.value.trim();
+      if (!text) return;
+      state.customContent = Array.isArray(state.customContent) ? state.customContent : [];
+      state.customContent.push({
+        id: `content-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        location: document.getElementById('communityTextLocation').value,
+        route: document.getElementById('communityTextRoute').value,
+        text
+      });
+      input.value = '';
+      renderCustomContent();
+      renderCommunityTextTargets();
+      await saveStateToCloud(false);
+    }
+
+    function renderCustomContent(location) {
+      document.querySelectorAll('[data-custom-content]').forEach(node => {
+        if (!location || node.dataset.customLocation === location) node.remove();
+      });
+      const items = Array.isArray(state.customContent) ? state.customContent : [];
+      items.forEach(item => {
+        if (location && item.location !== location) return;
+        let host;
+        if (item.location === 'welcome') host = document.getElementById('welcomeContent');
+        else if (item.location === 'menu') host = document.getElementById('communityMenuMain');
+        else if (item.location === 'tables') host = document.getElementById('league');
+        else if (item.location === 'champions') host = document.querySelector('main [data-view-section="champions"]');
+        else if (item.location === 'payments') host = document.getElementById('payments');
+        else if (item.location === 'activities') host = document.getElementById('funActivities');
+        else if (item.location === 'chats') host = document.getElementById('community');
+        else host = document.querySelector(`main [data-view-section="${item.location}"]`);
+        if (!host) return;
+        const node = document.createElement(item.location === 'menu' ? 'button' : item.location === 'welcome' ? 'button' : 'p');
+        node.dataset.customContent = '';
+        node.dataset.customContentId = item.id;
+        node.dataset.customLocation = item.location;
+        node.dataset.saveKey = `custom-${item.id}`;
+        node.className = item.location === 'menu' ? 'epl-menu-link editable-node' : item.location === 'welcome' ? 'welcome-jump editable-node' : 'editable-node mt-3 text-sm text-white';
+        node.textContent = item.text || '';
+        if (item.location === 'menu' || item.location === 'welcome') {
+          node.type = 'button';
+          node.addEventListener('click', () => openCommunityView(communityViews.some(view => view.id === item.route) ? item.route : 'all'));
+        }
+        host.append(node);
+      });
+      applySavedTextChanges();
+      if (state.accessMode === 'superadmin') setInlineEditable(true);
+      if (document.getElementById('communityTextTarget')) renderCommunityTextTargets();
+    }
+
+    function applySavedTextChanges() {
+      if (!state.customTexts) return;
+      document.querySelectorAll('.editable-node[data-save-key]').forEach(node => {
+        const saved = state.customTexts[node.dataset.saveKey];
+        if (saved === '__deleted__') {
+          if (node.nextElementSibling?.classList.contains('text-delete-control')) node.nextElementSibling.remove();
+          node.remove();
+        }
+        else if (saved !== undefined) node.textContent = saved;
+      });
+      if (typeof communityViews !== 'undefined') {
+        communityViews.forEach((view, index) => {
+          const label = state.customTexts[`community-view-label-${view.id}`];
+          if (label !== undefined && label !== '__deleted__') view.label = label;
+          const dot = document.querySelector(`[data-carousel-dot="${index}"]`);
+          if (dot) dot.setAttribute('aria-label', view.label);
+        });
+      }
+    }
+
+    function installTextDeleteControls() {
+      document.querySelectorAll('.editable-node[data-save-key]').forEach(node => {
+        if (node.dataset.postKind || node.closest('#superAdminTextManager') || node.nextElementSibling?.classList.contains('text-delete-control')) return;
+        const remove = document.createElement('button');
+        remove.type = 'button';
+        remove.className = 'text-delete-control superadmin-only hidden ml-1 align-middle text-xs font-black text-[#FF2882]';
+        remove.textContent = '×';
+        remove.setAttribute('aria-label', 'Delete this text');
+        remove.addEventListener('click', async event => {
+          event.preventDefault();
+          event.stopPropagation();
+          if (state.accessMode !== 'superadmin') return;
+          state.customTexts = state.customTexts || {};
+          if (node.dataset.customContentId) {
+            state.customContent = (state.customContent || []).filter(item => item.id !== node.dataset.customContentId);
+            delete state.customTexts[node.dataset.saveKey];
+          } else {
+            state.customTexts[node.dataset.saveKey] = '__deleted__';
+          }
+          node.remove();
+          remove.remove();
+          await saveStateToCloud(false);
+          renderCommunityTextTargets();
+        });
+        node.after(remove);
+        if (state.accessMode === 'superadmin') remove.classList.remove('hidden');
+      });
+    }
+
+    function setCommunityPostText(element) {
+      const type = element.dataset.postKind;
+      const key = type === 'banter' ? 'trashTalks' : 'suggestions';
+      const item = (state[key] || []).find(post => String(post.id) === element.dataset.postId);
+      if (!item || state.accessMode !== 'superadmin') return;
+      item[element.dataset.postField === 'author' ? 'author' : 'text'] = element.textContent.trim();
+      persistActivityChanges();
+    }
+
+    function syncCommunityViewLabel(element) {
+      const viewId = element.dataset.communityLabel;
+      const view = communityViews.find(item => item.id === viewId);
+      if (!view) return;
+      const label = element.textContent.trim();
+      view.label = label;
+      const key = `community-view-label-${viewId}`;
+      state.customTexts = state.customTexts || {};
+      state.customTexts[key] = label;
+      document.querySelectorAll(`[data-community-label="${viewId}"]`).forEach(node => {
+        if (node !== element) node.textContent = label;
+      });
+      document.querySelectorAll(`[data-carousel-dot="${communityViews.indexOf(view)}"]`).forEach(dot => {
+        dot.setAttribute('aria-label', label);
+      });
+    }
+
+    async function saveStateToCloud(showNotification = false) {
+      let lastError;
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+          const saved = await saveSharedState();
+          return saved;
+        } catch (error) {
+          lastError = error;
+          if (attempt < 2) await new Promise(resolve => window.setTimeout(resolve, 400 * (attempt + 1)));
+        }
+      }
+      console.error('Cloud state save failed after retries:', lastError);
+      cloudErrorShown = true;
+      return false;
+    }
+
+    window.alert = function() {};
+    window.showAdminAlertPopup = function() {};
+    window.showToast = function(message) {
+      const allowed = ['Number copied to clipboard', 'Payout confirmed', 'Super Admin unlocked'];
+      if (!allowed.includes(String(message))) return;
+      const container = document.getElementById('toastContainer');
+      if (!container) return;
+      const toast = document.createElement('div');
+      toast.className = 'rounded-xl bg-[#3D0042] px-4 py-3 text-sm font-bold text-white shadow-xl';
+      toast.textContent = String(message);
+      container.append(toast);
+      window.setTimeout(() => toast.remove(), 2600);
+    };
+    window.canDeleteOwnPost = function(author) {
+      return state.accessMode === 'superadmin' ||
+        (sessionStorage.getItem('fpl_manager_identity') || '') === String(author || '');
+    };
+    window.copyToClipboard = function(elementId) {
+      const element = document.getElementById(elementId);
+      const text = element && element.textContent ? element.textContent.trim() : '';
+      if (!text || text === 'Not Set Yet') return;
+      const input = document.createElement('textarea');
+      input.value = text;
+      input.style.position = 'fixed';
+      input.style.opacity = '0';
+      document.body.append(input);
+      input.select();
+      document.execCommand('copy');
+      input.remove();
+      showToast('Number copied to clipboard');
+    };
+    window.copyShareLink = async function() {
+      const input = document.getElementById('shareLinkInput');
+      if (!input) return;
+      try {
+        await navigator.clipboard.writeText(input.value);
+      } catch (_) {
+        input.select();
+        document.execCommand('copy');
+      }
+      showToast('Share link copied to clipboard');
+    };
+    const originalUnlockAdminAccess = unlockAdminAccess;
+    window.unlockAdminAccess = function() {
+      originalUnlockAdminAccess();
+      if (state.accessMode === 'superadmin') showToast('Super Admin unlocked');
+    };
+    const originalPayoutConfirmation = confirmPayoutReceipt;
+    window.confirmPayoutReceipt = async function() {
+      const previous = state.payoutConfirmedAt;
+      await originalPayoutConfirmation();
+      if (!previous && state.payoutConfirmedAt && lastSharedPayload && lastSharedPayload.payoutConfirmedAt === state.payoutConfirmedAt) {
+        showToast('Payout confirmed');
+      }
+    };
+    window.addEventListener('focusout', event => {
+      const node = event.target;
+      if (!(node instanceof HTMLElement) || !node.isContentEditable) return;
+      if (state.accessMode === 'superadmin' && node.dataset.communityLabel) syncCommunityViewLabel(node);
+      if (node.dataset.postKind) { setCommunityPostText(node); return; }
+      const memberId = node.dataset.memberNameId || node.dataset.memberGwId || node.dataset.memberTotalId;
+      if (memberId && state.accessMode === 'superadmin') {
+        const member = (state.members || []).find(item => String(item.id) === memberId);
+        if (member) {
+          if (node.dataset.memberNameId) member.name = node.textContent.trim();
+          else if (node.dataset.memberGwId) member.gwPoints = Number(node.textContent.trim()) || 0;
+          else member.points = Number(node.textContent.trim()) || 0;
+          saveStateToCloud(false);
+        }
+        return;
+      }
+      if (node.dataset.customContentId) {
+        const content = (state.customContent || []).find(item => item.id === node.dataset.customContentId);
+        if (content) content.text = node.textContent.trim();
+        state.customTexts = state.customTexts || {};
+        state.customTexts[node.dataset.saveKey] = node.textContent;
+        saveStateToCloud(false);
+        return;
+      }
+      if (state.accessMode === 'superadmin' && node.classList.contains('editable-node') && node.dataset.saveKey) {
+        state.customTexts = state.customTexts || {};
+        state.customTexts[node.dataset.saveKey] = node.textContent;
+        if (node.matches('header h1 span')) {
+          state.branding = { ...state.branding, title: node.textContent.trim() };
+          document.title = state.branding.title;
+        }
+        saveStateToCloud(false);
+      }
+    });
+    document.addEventListener('input', event => {
+      const node = event.target;
+      if (state.accessMode === 'superadmin' && node instanceof HTMLElement && node.isContentEditable && node.dataset.communityLabel) {
+        syncCommunityViewLabel(node);
+      }
+    });
+
+    function tagAllCommunityText() {
+      let labelIndex = 0;
+      document.querySelectorAll('main label, #adminAccessModal label').forEach(label => {
+        [...label.childNodes].filter(child => child.nodeType === Node.TEXT_NODE && child.textContent.trim()).forEach(child => {
+          const editableText = document.createElement('span');
+          editableText.className = 'editable-node';
+          editableText.dataset.saveKey = `epl-label-${labelIndex++}`;
+          editableText.textContent = child.textContent;
+          label.replaceChild(editableText, child);
+        });
+      });
+      document.querySelectorAll('main h1, main h2, main h3, main h4, main p, main li, main th, main td, main button, main b, main strong, header h1 span, header small, #eplBottomNav button, #welcomeScreen h1, #welcomeScreen .welcome-jump, #eplMenuOverlay .menu-login, #eplMenuOverlay .epl-menu-link, #eplMenuOverlay .epl-menu-muted, #adminAccessModal p, #adminAccessModal button, #adminAccessModal .text-xs').forEach(node => {
+        if (!node.querySelector('input,textarea,select,button,.editable-node') && !node.classList.contains('admin-only') && !node.classList.contains('superadmin-only')) {
+          node.classList.add('editable-node');
+        }
+      });
+      document.querySelectorAll('#funActivities [data-activity-item="bench"] li').forEach(item => {
+        if (item.textContent.toLowerCase().includes('send your manager name')) {
+          item.textContent = 'Members can review completed swaps below. Only Super Admin can add or change a published swap.';
+          item.dataset.saveKey = 'epl-bench-member-view-instruction';
+        }
+      });
+      assignNewEditableKeys(document, 'epl-content');
+      if (typeof tagEditableNodes === 'function') tagEditableNodes();
+    }
+
+    function assignNewEditableKeys(root, prefix) {
+      root.querySelectorAll('.editable-node:not([data-save-key])').forEach((node, index) => {
+        const label = node.textContent.trim().toLocaleLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+        node.dataset.saveKey = `${prefix}-${label || 'text'}-${index}`;
+      });
+    }
+
+    function initializeCommunityExperience() {
+      buildCommunityHeader();
+      buildBottomNavigation();
+      buildCarousel();
+      classifyCommunitySections();
+      buildActivityControls();
+      tagAllCommunityText();
+      buildSuperAdminTextManager();
+      renderCustomContent();
+      applySavedTextChanges();
+      installTextDeleteControls();
+      document.body.classList.add('welcome-mode');
+      document.getElementById('managerSearchInput').addEventListener('input', event => filterManagerRows(event.target.value));
+      const existingNav = document.querySelector('body > nav:not(#eplBottomNav)');
+      if (existingNav) existingNav.remove();
+      document.getElementById('rosterTableBody').addEventListener('click', event => {
+        const row = event.target.closest('tr');
+        if (row && document.getElementById('managerSearchInput').value) row.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      });
+      const originalChangeAccessMode = changeAccessMode;
+      window.changeAccessMode = function(mode) {
+        originalChangeAccessMode(mode);
+        renderActivities();
+      };
+      const originalRenderApp = renderApp;
+      window.renderApp = function() {
+        originalRenderApp();
+        renderActivities();
+        renderCustomContent();
+        applySavedTextChanges();
+        installTextDeleteControls();
+        renderCommunityTextTargets();
+        if (state.accessMode === 'superadmin') setInlineEditable(true);
+      };
+      const originalRenderRoster = renderRoster;
+      window.renderRoster = function() {
+        originalRenderRoster();
+        renderActivities();
+        applySavedTextChanges();
+        installTextDeleteControls();
+        const query = document.getElementById('managerSearchInput')?.value || '';
+        if (query) filterManagerRows(query);
+      };
+      openCommunityView('all');
+      showWelcomeScreen();
+    }
+
+    document.addEventListener('DOMContentLoaded', initializeCommunityExperience);
   </script>
 
 </body>
